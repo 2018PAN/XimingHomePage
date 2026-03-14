@@ -1,0 +1,82 @@
+---
+title: "维也纳地铁文创扑克牌"
+publishedAt: "2025-05-07"
+tag: ["creative", "cartography"]
+hideHeaderImage: true
+summary: "将维也纳地铁（U-Bahn）线路图拆解重构为 54 张扑克牌，从设计制图到联系代工厂进行实体印刷，打造了一款极具互动性的城市旅游创意周边。"
+images:
+  - "/images/projects/ubahn-cards/Real2.png"
+  - "/images/projects/ubahn-cards/map.jpg"
+team:
+  - name: "Ximing Wang"
+    role: "设计"
+    avatar: "/images/avatar.jpg"
+---
+
+
+## 项目背景
+
+自从搬到维也纳后，我一直被这座城市美丽的城市风貌所吸引。与此同时，我也对花式扑克产生了浓厚的兴趣，并开始收集各种主题的扑克牌。因此，我萌生了一个想法：为什么不把扑克牌与城市探索这两件我热爱的事物结合起来呢？
+
+项目的核心理念是 **"Collect & Connect"（收集与连接）**：它既是一副可以正常游玩的标准 54 张扑克牌，也是一组模块化的地铁地图拼图。我希望通过这种形式，打破传统纸质地图的局限性，为游客打造一款兼具趣味性与纪念意义的城市文创周边。
+
+## 卡牌视觉设计
+
+这个项目全程主要使用 **Adobe Illustrator** 进行矢量绘制与排版。最大的制图挑战在于连续性与分割。我需要将错综复杂的维也纳地铁网络精准地切割到 54 个独立的卡牌网格中，同时保证：
+
+* **独立性：** 每张牌的角落保留了清晰的花色和数字（如红桃 K、黑桃 7），确保其作为扑克牌的实用功能。
+* **拼接性：** 利用 Illustrator 严谨的网格与辅助线系统，确保当所有卡牌按照特定顺序排列时，不同卡牌边缘的地铁线路能够完美对齐，拼接成一张完整的 U-Bahn 交通图。
+
+
+在卡面和外包装的设计上，我提取了维也纳五条核心地铁线的标志性颜色（U1 红、U2 紫、U3 橙、U4 绿、U6 棕）。**你可以尝试拖动右侧的牌堆来查看不同的卡面：**
+
+<Flex direction="row" gap="16" mobileDirection="column" fillWidth >
+    
+    {/* 左侧：占据 1 份宽度。用 paddingX 把它往中间挤！ */}
+    <Flex flex={1} fillWidth paddingX="128" justifyContent="center">
+        <ZoomableImage 
+            src="/images/projects/ubahn-cards/back.png" 
+            alt="卡背设计" 
+            caption="图 1：卡背设计，中心为 U-Bahn 的标志性 'U'，四周由五条地铁线的代表色呈放射状展开。"
+        />
+    </Flex>
+
+    {/* 右侧：用同样的 paddingX 挤压，保持两边一样大 */}
+    <Flex flex={1} fillWidth  justifyContent="center">
+        <CardStack 
+          images="/images/projects/ubahn-cards/cards_images/11.png, /images/projects/ubahn-cards/cards_images/1.png, /images/projects/ubahn-cards/cards_images/29.png, /images/projects/ubahn-cards/cards_images/10.png, /images/projects/ubahn-cards/cards_images/25.png,/images/projects/ubahn-cards/cards_images/28.png, /images/projects/ubahn-cards/cards_images/27.png"
+          
+          
+        />
+    </Flex>
+
+</Flex>
+
+<ZoomableImage 
+    src="/images/projects/ubahn-cards/package.jpg" 
+    alt="包装盒展开图" 
+    caption="图 2：定制包装盒展开图。"
+/>
+
+<ZoomableImage 
+    src="/images/projects/ubahn-cards/map.jpg" 
+    alt="维也纳地铁扑克牌完整拼图" 
+    caption="图 3：完整扑克牌设计图"
+/>
+
+## 实体产品
+
+这个项目并没有停留在数字概念阶段。为了完整体验文创产品设计的全流程，我亲自联系了代工厂进行实体打样。
+
+从调整出血线（Bleed）、验证 CMYK 印刷色彩模式，到选择纸牌的材质和表面涂层，我完成了从“图纸”到“实物”的跨越。当最终拿到这一盒充满质感的维也纳地铁扑克牌时，不仅验证了 Illustrator 模块化设计的精确性，也让我收获了极大的成就感。
+<ZoomableImage 
+    src="/images/projects/ubahn-cards/Real2.png" 
+    alt="实体扑克牌与外包装盒实拍" 
+    caption="图 4：定制的包装盒与卡牌质感实拍。"
+/>
+
+<ZoomableImage 
+    src="/images/projects/ubahn-cards/Real1.jpg" 
+    alt="54张实体扑克牌拼接实拍" 
+    caption="图 5：54 张纸牌拼接出完整的 U-Bahn 地铁网。"
+/>

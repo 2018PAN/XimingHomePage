@@ -1,0 +1,101 @@
+---
+title: "ToDoMap: 待办地图 App"
+publishedAt: "2026-01-23"
+tag: ["android-dev", "ui-ux"]
+hideHeaderImage: true
+summary: "德累斯顿工大 Mobile Cartography 课程项目。使用 Android Studio 基于 Java 原生开发的一款将待办事项与地图结合的安卓手机软件，专为老年人设计，强调无障碍与空间记忆辅助。"
+images:
+  - "/images/projects/todomap/Logo.jpg"
+team:
+  - name: "Ximing Wang"
+    role: "核心功能与架构开发"
+    avatar: "/images/avatar.jpg"
+  - name: "Emiel Verté"
+    role: "团队成员"
+    avatar: "/images/projects/user.svg"
+  - name: "Thijs van Laar"
+    role: "团队成员"
+    avatar: "/images/projects/user.svg"
+  - name: "Devita Remala Sari"
+    role: "团队成员"
+    avatar: "/images/projects/user.svg"
+---
+
+<ZoomableImage 
+    src="/images/projects/todomap/Logo.jpg" 
+    alt="ToDoMap Project Cover" 
+    caption="图 1：ToDoMap 课程Logo"
+/>
+
+## 项目背景
+
+这是我们在德累斯顿工业大学 "Mobile Cartography" 课程的小组项目。
+
+在日常生活中，很多事情都带有空间属性，比如去超市购物、去医院复诊或是拜访老友。但传统的 To-Do App 往往只关注时间，导航 App 又只关注地点。因此，我们想开发一款应用，把日程表直接搬到地图上，让用户直观地看到今天要在哪里完成什么事。
+
+我们的主要目标用户是**老年人**。随着年龄增长，长辈们可能会面临视力下降、记忆力减退或对复杂智能手机界面感到不适的问题。通过将待办事项与地图位置绑定，App 可以有效帮助他们建立空间记忆，降低规划日常出行的认知负担。
+
+## App 页面介绍
+
+为了不让长辈觉得复杂，整个 App 的层级非常扁平，底部导航栏只包含四个核心页面：**地图 (Map)**、**任务 (Tasks)**、**日历 (Calendar)** 和 **设置 (Settings)**。
+
+{/* 第一行：地图 + 任务列表 */}
+<Flex direction="row" gap="16" mobileDirection="column" fillWidth alignItems="flex-start">
+    <Flex flex={1} fillWidth justifyContent="center">
+        <ZoomableImage 
+            src="/images/projects/todomap/map-view.png" 
+            alt="地图主界面" 
+            caption="图 2：地图 (Map) —— 默认首页，直观显示待办坐标。"
+        />
+    </Flex>
+    <Flex flex={1} fillWidth justifyContent="center">
+        <ZoomableImage 
+            src="/images/projects/todomap/tasks-view.png" 
+            alt="任务列表" 
+            caption="图 3：任务 (Tasks) —— 传统的上下滚动备忘录列表。"
+        />
+    </Flex>
+    <Flex flex={1} fillWidth justifyContent="center">
+        <ZoomableImage 
+            src="/images/projects/todomap/calendar.png" 
+            alt="日历视图" 
+            caption="图 4：日历 (Calendar) —— 提供熟悉的月历视图查看安排。"
+        />
+    </Flex>
+    <Flex flex={1} fillWidth justifyContent="center">
+        <ZoomableImage 
+            src="/images/projects/todomap/settings.png" 
+            alt="设置界面" 
+            caption="图 5：设置 (Settings) —— 存放个性化与无障碍选项。"
+        />
+    </Flex>
+</Flex>
+
+{/* 第二行：日历 + 设置 */}
+
+## 功能介绍
+
+针对老年人的使用习惯，我们在功能交互上做了很多适老化（Accessibility）的设计：
+
+
+* **可视化位置选择：** 在添加新任务时，用户不需要输入复杂的长地址，直接在地图上拖拽大头针确认位置即可。
+* **教程：** 首次打开 App 时，会有一套详尽的新手引导。如果老人家用久了忘记怎么操作，随时可以在设置里的 "Help & Tutorial" 重新观看。
+* **自定义UI：** 用户可以根据自己的视力情况，通过滑块自由调整全局**字体大小**。同时支持夜间模式（Night Mode）和主题色切换。
+* **通知与多语言：** 设置页内置了专门的通知提醒开关。并且为了方便不同母语背景的用户，我们配置了中文、英文、德语、荷兰语和印尼语五种语言的支持。
+<Flex direction="row" gap="16" mobileDirection="column" fillWidth alignItems="flex-start">
+    
+    <Flex flex={1} fillWidth paddingX="128" justifyContent="center">
+        <ZoomableImage 
+            src="/images/projects/todomap/add-task.png" 
+            alt="添加待办与选址" 
+            caption="图 6：添加任务时，用户可以直接在地图上拖拽确认位置，免去繁琐的文字输入。"
+        />
+    </Flex>
+    <Flex flex={1} fillWidth paddingX="128" justifyContent="center">
+        <ZoomableImage 
+            src="/images/projects/todomap/tutorial.png" 
+            alt="地图主界面" 
+            caption="图 7：教程功能，首次启动app时会出现。"
+        />
+    </Flex>
+</Flex>

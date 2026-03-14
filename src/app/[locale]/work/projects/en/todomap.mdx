@@ -1,0 +1,100 @@
+---
+title: "ToDoMap: App for the Elderly"
+publishedAt: "2026-01-23"
+tag: ["android-dev", "ui-ux"]
+hideHeaderImage: true
+summary: "A Mobile Cartography course project at TU Dresden. Developed natively in Java using Android Studio, this app combines to-do lists with map locations. Designed specifically for the elderly, emphasizing accessibility and spatial memory assistance."
+images:
+  - "/images/projects/todomap/Logo.jpg"
+team:
+  - name: "Ximing Wang"
+    role: "Core Feature & Architecture Developer"
+    avatar: "/images/avatar.jpg"
+  - name: "Emiel Verté"
+    role: "Team Member"
+    avatar: "/images/projects/user.svg"
+  - name: "Thijs van Laar"
+    role: "Team Member"
+    avatar: "/images/projects/user.svg"
+  - name: "Devita Remala Sari"
+    role: "Team Member"
+    avatar: "/images/projects/user.svg"
+---
+
+<ZoomableImage 
+    src="/images/projects/todomap/Logo.jpg" 
+    alt="ToDoMap Project Cover" 
+    caption="Figure 1: ToDoMap Course Logo"
+/>
+
+## Project Background
+
+This is a group project for the "Mobile Cartography" course at TU Dresden.
+
+In daily life, many activities have spatial attributes, such as grocery shopping, medical appointments, or visiting old friends. However, traditional To-Do apps often focus solely on time, while navigation apps focus only on locations. Therefore, we wanted to develop an application that brings the schedule directly onto the map, allowing users to intuitively see where they need to complete tasks today.
+
+Our primary target audience is the **elderly**. As they age, seniors may face declining vision, memory loss, or discomfort with complex smartphone interfaces. By binding to-do items to map locations, the app can effectively help them build spatial memory and reduce the cognitive load of planning daily trips.
+
+## App Interface
+
+To avoid making it feel complicated for seniors, the app's hierarchy is extremely flat. The bottom navigation bar contains only four core pages: **Map**, **Tasks**, **Calendar**, and **Settings**.
+
+{/* First Row: Map + Tasks + Calendar + Settings */}
+<Flex direction="row" gap="16" mobileDirection="column" fillWidth alignItems="flex-start">
+    <Flex flex={1} fillWidth justifyContent="center">
+        <ZoomableImage 
+            src="/images/projects/todomap/map-view.png" 
+            alt="Map Main Interface" 
+            caption="Figure 2: Map — The default home page, intuitively displaying task coordinates."
+        />
+    </Flex>
+    <Flex flex={1} fillWidth justifyContent="center">
+        <ZoomableImage 
+            src="/images/projects/todomap/tasks-view.png" 
+            alt="Tasks List" 
+            caption="Figure 3: Tasks — A traditional scrolling memo list."
+        />
+    </Flex>
+    <Flex flex={1} fillWidth justifyContent="center">
+        <ZoomableImage 
+            src="/images/projects/todomap/calendar.png" 
+            alt="Calendar View" 
+            caption="Figure 4: Calendar — Provides a familiar monthly view to check schedules."
+        />
+    </Flex>
+    <Flex flex={1} fillWidth justifyContent="center">
+        <ZoomableImage 
+            src="/images/projects/todomap/settings.png" 
+            alt="Settings Interface" 
+            caption="Figure 5: Settings — Houses personalization and accessibility options."
+        />
+    </Flex>
+</Flex>
+
+{/* Second Row Section Elements Removed/Repositioned */}
+
+## Key Features
+
+Catering to the habits of elderly users, we incorporated many age-friendly (Accessibility) designs into the functional interactions:
+
+* **Visual Location Selection:** When adding a new task, users don't need to type out complex, long addresses. They can simply drag a pin on the map to confirm the location.
+* **Tutorial:** A detailed onboarding guide appears when the app is opened for the first time. If seniors forget how to use it over time, they can rewatch it anytime via "Help & Tutorial" in the Settings.
+* **Customizable UI:** Users can freely adjust the global **font size** via a slider based on their visual needs. It also supports Night Mode and theme color switching.
+* **Notifications & Multi-language:** The settings page includes a dedicated notification toggle. To accommodate users from different linguistic backgrounds, we support five languages: Chinese, English, German, Dutch, and Indonesian.
+
+<Flex direction="row" gap="16" mobileDirection="column" fillWidth alignItems="flex-start">
+    <Flex flex={1} fillWidth paddingX="128" justifyContent="center">
+        <ZoomableImage 
+            src="/images/projects/todomap/add-task.png" 
+            alt="Adding Task and Selecting Location" 
+            caption="Figure 6: When adding a task, users can drag the pin on the map to confirm the location, eliminating tedious text input."
+        />
+    </Flex>
+    <Flex flex={1} fillWidth paddingX="128" justifyContent="center">
+        <ZoomableImage 
+            src="/images/projects/todomap/tutorial.png" 
+            alt="Tutorial Interface" 
+            caption="Figure 7: Tutorial feature, appearing on the first app launch."
+        />
+    </Flex>
+</Flex>

@@ -1,0 +1,90 @@
+---
+title: "State of Mind: 交互式政体与地理教育游戏"
+publishedAt: "2025-06-18"
+tag: ["web-dev", "ui-ux"]
+hideHeaderImage: true
+link: "https://rasscrom.github.io/democracy-game/src/pages/home" 
+summary: "维也纳工业大学 Web Mapping 课程团队项目。一款以全球政体与民主为主题的交互式教育 Web 游戏，融合了地图探索、历史人物解析与地理事实推理。"
+images:
+  - "/images/projects/state-of-mind/figure.jpg"
+  - "/images/projects/state-of-mind/maple.jpg"
+  - "/images/projects/state-of-mind/classic.jpg"
+  - "/images/projects/state-of-mind/drag-n-drop.jpg"
+team:
+  - name: "Ximing Wang"
+    avatar: "/images/avatar.jpg"
+  - name: "Agata Kiseleva"
+    avatar: "/images/projects/user.svg"
+  - name: "Alihan Beisenbayev"
+    avatar: "/images/projects/user.svg"
+  - name: "Anna Shelegina"
+    avatar: "/images/projects/user.svg"
+---
+
+## 项目背景
+
+**State of Mind** 是我们在维也纳工业大学“Web Mapping”课程中，由四人小组协作开发的一款交互式地理教育游戏。
+
+游戏以“民主与政体”为核心主题，旨在通过寓教于乐的方式，带领玩家探索世界各地的不同政治制度。我们将枯燥的地缘政治数据和地理知识，转化为生动有趣的 Web 交互体验，让用户在游玩的过程中深化对全球局势的理解。
+
+## 核心玩法与游戏模式
+
+为了满足不同维度的知识挑战，我们在网页端设计了四种独特的游戏模式，全方位考验玩家的地理储备、历史知识和逻辑推理能力：
+
+
+### 1. 经典模式 (Classic Mode)
+传统的地图问答模式。玩家需要在交互式地图上直接操作，根据系统给出的政体特征或基础地理信息提示，在现实时间内点击地图完成相应的国家定位挑战。
+
+<ZoomableImage 
+    src="/images/projects/state-of-mind/classic.jpg" 
+    alt="经典模式游戏界面" 
+    caption="图 1：经典模式（Classic Mode）交互界面。"
+/>
+
+### 2. 人物模式 (Figure Mode)
+该模式引入了全球极具影响力的历史与政治人物。玩家需要根据屏幕上出现的历史人物线索，推理并定位其对应的国家。
+
+<ZoomableImage 
+    src="/images/projects/state-of-mind/figure.jpg" 
+    alt="人物模式游戏界面" 
+    caption="图 2：人物模式（Figure Mode）交互界面。"
+/>
+
+### 3. 拖拽模式 (Drag N Drop)
+硬核的地理形状挑战。系统会给出特定国家的几何轮廓，玩家需要根据整体特征进行分类，并拖拽国家至相应的政体栏。
+
+<ZoomableImage 
+    src="/images/projects/state-of-mind/drag-n-drop.jpg" 
+    alt="拖拽模式游戏界面" 
+    caption="图 3：拖拽模式（Drag N Drop）交互界面。"
+/>
+
+### 4. 寻宝模式 (Maple / Geography Facts Game)
+这是一个渐进式的地理事实推理游戏。系统会逐条给出特定国家的属性线索（例如人口数量、主要语言、首都名称等），玩家需要根据这些线索综合推断，并在左下角的输入框中猜出正确的国家名称，或在地图上点击正确的国家位置。
+
+<ZoomableImage 
+    src="/images/projects/state-of-mind/maple.jpg" 
+    alt="Maple 模式游戏界面" 
+    caption="图 4：寻宝模式 （Maple）交互界面。"
+/>
+
+## 全球政体统计
+
+除了游戏本体，我们还为平台开发了一个专业的数据统计面板（Statistics Dashboard，图 4）。这里汇总了游戏底层庞大的地理与政治数据库：
+
+<ZoomableImage 
+    src="/images/projects/state-of-mind/dashboard.jpg" 
+    alt="State of Mind 全球政体数据统计看板" 
+    caption="图 5：国家数据统计面板。"
+/>
+
+* **全景数据分析：** 系统收录并分析了全球 **190** 个国家和地区的数据。
+* **政体分类可视化：** 将全球国家和地区直观地划分为四大类：民主政体、专制政体、混合政体 以及君主制。
+* **动态政体地图 (Global Regime Map)：** 在看板下方，我们使用 Web Mapping 技术渲染了一张彩色的全球政体分布图，让玩家在游戏之余，也能以宏观的视角审视真实世界的地缘政治格局。
+
+## 总结
+
+State of Mind 是一次将严肃主题与 Web 交互技术完美融合的尝试。作为开发团队的一员，这个项目不仅锻炼了我在复杂状态管理、地图 API 调用和前端 UI/UX 设计方面的能力，也让我深刻体会到了 Web 地图在教育和科普领域的巨大潜力。
+
+---
+*欢迎点击访问 [State of Mind 在线游戏](https://rasscrom.github.io/democracy-game/src/pages/home) ，亲自体验我们的地图交互玩法。*

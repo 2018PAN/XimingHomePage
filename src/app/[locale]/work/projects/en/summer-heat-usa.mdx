@@ -1,0 +1,35 @@
+---
+title: "Five Years of Summer Heat in USA"
+publishedAt: "2026-02-10"
+tag: ["cartography", "data-visualization", "gis"]
+hideHeaderImage: true
+summary: "A bivariate map that visually presents the average summer temperatures across the contiguous United States over the past five years, alongside regional warming trends compared to the last 20 years."
+images:
+  - "/images/projects/summer-heat-usa/map.png"
+team:
+  - name: "Ximing Wang"
+    role: "Cartographer"
+    avatar: "/images/avatar.jpg"
+---
+
+<ZoomableImage 
+    src="/images/projects/summer-heat-usa/map.png" 
+    alt="Five Years of Summer Heat Map" 
+    caption="Figure 1: Five Years of Summer Heat — A map of US summer temperatures and warming trends."
+/>
+
+## Project Overview
+
+Focusing on the contiguous United States, this map intuitively visualizes the current average summer temperatures (2021–2025) and compares them with historical data from 20 years ago (2001–2005), illustrating the intensity of climate warming across different regions.
+
+To clearly convey two different dimensions of data on a single map, this design utilizes a **bivariate symbolization system**, transmitting information through the visual variables of a dot grid:
+
+* **Color Intensity:** Represents the absolute average summer temperature from 2021 to 2025. The deeper the purplish-red, the hotter the region is during the summer (e.g., Texas and the Southern states).
+* **Dot Size:** Represents the magnitude of temperature increase relative to the 2001–2005 period. A larger dot indicates a faster and more pronounced warming trend over the past 20 years.
+
+## Workflow
+
+For the cartographic workflow, this map was created using ArcGIS Pro and Adobe Illustrator.
+
+1. **ArcGIS Pro:** Responsible for the initial underlying data processing. This included spatial joins of NOAA climate data, gridding processes, and the preliminary generation of the bivariate layers.
+2. **Adobe Illustrator:** Responsible for the final visual presentation and layout. In Illustrator, I refined the base map, designed a highly self-explanatory bivariate legend, and added background drop shadows and text annotations, significantly enhancing the map's readability and aesthetic appeal.

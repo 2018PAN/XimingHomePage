@@ -1,0 +1,63 @@
+---
+title: "舌尖上的维也纳"
+publishedAt: "2025-06-18"
+tag: ["web-dev", "gis"]
+hideHeaderImage: true
+summary: "这是 TU Wien 制图信息系统 (CIS) 课程的期末项目，涵盖了从 PostGIS 数据库处理、GeoServer 服务发布到 Leaflet 前端交互的完整 WebGIS 开发流程。"
+images:
+  - "/images/projects/eatinvienna/1.png"
+  - "/images/projects/eatinvienna/3.png"
+team:
+  - name: "Ximing Wang"
+    avatar: "/images/avatar.jpg"
+---
+
+<ZoomableImage 
+    src="/images/projects/eatinvienna/1.png" 
+    alt="维也纳美食地图全貌" 
+    caption="图 1：维也纳内城美食与休闲绿地分布总览。"
+/>
+
+## 项目背景
+
+这是我在维也纳工业大学（TU Wien）“制图信息系统（CIS）”课程的期末项目。目标是制作一张交互式地图，不仅能帮用户在市中心找餐厅、咖啡馆和酒吧，还能顺便标出附近的公园和绿地，方便大家买完快餐后找个地方休息。
+
+## 空间数据库 SQL
+
+项目的核心挑战在于底层的数据处理。我将 OpenStreetMap (OSM) 的原始数据导入 PostgreSQL 数据库，并使用 **PostGIS** 扩展来进行空间分析。
+
+因为原始数据非常庞大（包含几百个字段），我编写了 SQL 脚本来提取有用的信息，比如清洗分类、计算公园的面积等。为了让地图在网页上加载得更快，我还专门为数据建立了空间索引：
+
+```sql
+-- 建立空间索引，大幅提升前端的地图渲染速度
+CREATE INDEX idx_leisure_parks_geom
+ON leisure_parks USING GIST (geom);
+```
+
+
+在数据库里把数据清理干净后，使用 **GeoServer** 将它们发布成了地图服务（WMS）。
+
+为了让地图看起来更直观，我编写了 SLD（样式图层描述符）文件，给不同类型的地点配上了专属的小图标（比如咖啡杯代表咖啡馆，酒杯代表酒吧），并将所有图层打包成一个整体，供前端调用。
+
+## 前端交互
+
+网页的前端部分是我用 HTML、CSS、JavaScript 和 **Leaflet** 搭建的。重点实现了以下功能：
+
+* **动态筛选：** 加上了下拉菜单，用户可以过滤，只看自己感兴趣的餐饮或绿地类型。
+* **点击查看详情：** 点击地图上的小图标，侧边栏会立刻调用接口，弹出该地点的详细信息（比如菜系、营业时间、是否提供无障碍设施等）。
+
+<ZoomableImage 
+    src="/images/projects/eatinvienna/2.png" 
+    alt="地图筛选功能" 
+    caption="图 2：动态筛选出地图上的咖啡馆和花园。"
+/>
+
+<ZoomableImage 
+    src="/images/projects/eatinvienna/3.png" 
+    alt="侧边栏详情查看" 
+    caption="图 3：筛选快餐店与公园，并在侧边栏展示点击获取的具体位置信息（如 Five Guys 的营业时间与地址）。"
+/>
+
+## 总结
+
+这是一个非常务实的练手项目。它帮我彻底打通了全栈 WebGIS 的开发闭环——从最底层的 PostgreSQL/PostGIS 空间数据清洗，到服务端的 GeoServer 渲染，再到前端地图的交互实现。

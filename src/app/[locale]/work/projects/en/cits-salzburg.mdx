@@ -1,0 +1,90 @@
+---
+title: "C-ITS Vehicle Data Visualization: Salzburg Traffic Tracking"
+publishedAt: "2025-06-27"
+tag: ["data-visualization", "web-dev", "gis"]
+hideHeaderImage: true
+link: "https://2018pan.github.io/C-ITS_Visulisation/trajectories.html"
+summary: "Final project for the Location-Based Services course at TU Wien. By processing and analyzing massive C-ITS vehicle communication data, it utilizes map-matching algorithms and an interactive web dashboard to visually present traffic conditions and incidents in Salzburg."
+images:
+  - "/images/projects/cits-salzburg/heatmap.png"
+  - "/images/projects/cits-salzburg/dashboard.png"
+  - "/images/projects/cits-salzburg/trajectory.png"
+team:
+  - name: "Ximing Wang"
+    role: "Data Analysis & Web Developer"
+    avatar: "/images/avatar.jpg"
+  - name: "Devita Remala Sari"
+    role: "Presentation"
+    avatar: "/images/projects/user.svg"
+  - name: "Paula Martín Castillo"
+    role: "Report Writing"
+    avatar: "/images/projects/user.svg"
+  - name: "Suphaphong Sirinapaphan"
+    role: "PM & Visualization Design"
+    avatar: "/images/projects/user.svg"
+---
+
+<ZoomableImage 
+    src="/images/projects/cits-salzburg/dashboard.png" 
+    alt="C-ITS Traffic Visualization Dashboard" 
+    caption="Figure 1: A comprehensive interactive dashboard combining road network speeds and traffic incident heatmaps."
+/>
+
+## Project Background
+
+This is my final project for the Location-Based Services course at TU Wien. In this project, we focused on Cooperative Intelligent Transport Systems (C-ITS), aiming to develop an interactive visualization platform to analyze traffic dynamics during the morning rush hour in Salzburg, Austria. Due to data volume constraints, we selected the specific timeframe of 7:00-8:00 AM.
+
+The system combines two key types of V2X (Vehicle-to-Everything) communication data: **CAM (Cooperative Awareness Message)**, which provides real-time vehicle positions and speeds, and **DENM (Decentralized Environmental Notification Message)**, which warns of traffic incidents or roadworks.
+
+## Data Processing
+
+In this team project, I was primarily responsible for core programming, data processing, and Web visualization. The raw GPS data was massive and contained errors. To ensure smooth rendering on the frontend map, I built a rigorous processing pipeline on the backend:
+
+* **Data Cleaning:** Removed invalid GPS records lacking timestamps, with an HDOP greater than 5, or with abnormal speeding (> 55 m/s). Applied moving average smoothing and interpolation to eliminate trajectory drift.
+* **Map Matching:** We extracted drivable road network data from OpenStreetMap. To accurately and rapidly match up to 100,000 GPS trajectory points to 400,000 road segments, I constructed an **R-Tree spatial index**, which significantly improved the efficiency of nearest-neighbor queries.
+
+```python
+for p in cam_points:
+    pt = Point(p['longitude'], p['latitude'])
+    best_dist = float('inf')
+    # Use R-Tree index to quickly filter candidate road segments
+    for rid in idx.intersection((pt.x, pt.y, pt.x, pt.y)):
+        way_id, line = lines[rid]
+        d = line.distance(pt)
+        if d < best_dist:
+            best_dist, best_way = d, way_id
+    p['way_id'] = best_way
+```
+
+* **Road Segment Speed Aggregation:** Grouped the matched points by road ID, calculated the weighted average speed for each road segment, and converted them into a lightweight JSON format.
+
+## System Features
+
+The web frontend is mainly divided into two core modules: **Trajectories** and **Dashboard**. The Dashboard serves as the data interaction center of the entire platform, providing users with a highly flexible exploratory experience:
+
+* **Multi-dimensional Data Console:** Users can freely filter vehicle types (e.g., passenger cars, freight vehicles, emergency vehicles) via the sidebar. By dragging the time slider, the system dynamically displays the overall data and average road segment speeds for the selected timeframe.
+* **Layer Combinations:** The map supports the free overlay and toggling of four core information layers:
+  * **Traffic Flows:** A dynamic road network color-coded based on vehicle speeds for the selected timeframe.
+  * **Heatmap:** Visually presents areas with a high incidence of traffic accidents and abnormal road conditions.
+  * **Traffic Incidents:** Accurately locates and categorizes various unexpected events on the roads.
+  * **Incident Traces:** Innovatively overlays vehicle driving trajectories from the 30 seconds prior to an accident, assisting in the analysis of accident causes and vehicle behavior.
+* **Data Interaction:** The map provides not only a macro overview but also micro-level data inspection. When users hover over or click on specific traffic incidents or road segments, the underlying data of that object—such as its ID, exact average speed, and event/vehicle type—immediately pops up.
+
+<ZoomableImage 
+    src="/images/projects/cits-salzburg/trajectory.png" 
+    alt="Original Vehicle Trajectory View" 
+    caption="Figure 2: The Trajectory View displaying raw vehicle paths."
+/>
+
+<ZoomableImage 
+    src="/images/projects/cits-salzburg/heatmap.png" 
+    alt="Traffic Flow and Heatmap Display" 
+    caption="Figure 3: Display of traffic flows and incident heatmaps for the selected timeframe."
+/>
+
+## Conclusion
+
+This project successfully transformed fragmented V2X communication data into a traffic monitoring platform with practical analytical value. It not only deeply honed my backend processing skills in massive spatial data cleaning and R-Tree algorithm application but also allowed me to experience how intuitive Web interaction design can assist in urban traffic evaluation and anomaly detection.
+
+---
+*Project Demo: Welcome to visit the [C-ITS Traffic Dashboard](https://2018pan.github.io/C-ITS_Visulisation/trajectories.html) to explore the morning rush hour traffic data in Salzburg.*

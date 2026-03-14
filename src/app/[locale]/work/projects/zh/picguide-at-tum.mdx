@@ -1,0 +1,75 @@
+---
+title: "PicGuide@TUM：实景图片校园导航系统"
+publishedAt: "2025-02-15"
+tag: ["web-dev", "ui-ux"]
+hideHeaderImage: true
+link: "https://picguide-tum.onrender.com/"
+summary: "作为TUM制图学课程（Mapping Project）的团队项目，我们开发了一个交互式Web平台，通过实景图片帮助新生更直观地在复杂的校园中寻路。"
+images:
+  - "/images/projects/picguide/Home.png"
+  - "/images/projects/picguide/Guide.png"
+team:
+  - name: "Ximing Wang"
+    role: "开发人员"
+    avatar: "/images/avatar.jpg"
+  - name: "Weiyi Gao"
+    role: "团队成员"
+    avatar: "/images/projects/user.svg"
+  - name: "Lingyu Tang"
+    role: "团队成员"
+    avatar: "/images/projects/user.svg"
+  - name: "Ching Yeung Wong"
+    role: "团队成员"
+    avatar: "/images/projects/user.svg"
+---
+
+<ZoomableImage 
+    src="/images/projects/picguide/Guide.png" 
+    alt="PicGuide@TUM 导航界面" 
+    caption="图 1：提供实景图片指引"
+/>
+
+## 项目背景
+
+慕尼黑工业大学（TUM）主校区的建筑结构较为复杂，楼宇之间相互连接，对于刚入学还不熟悉环境的新生来说，寻路往往是一个小挑战。现有的导航工具通常只提供抽象的地图，缺乏实景提示，难以帮助用户准确辨认当前位置。
+
+基于这一痛点，团队合作开发了这款 **PicGuide@TUM**。该系统尝试将真实的视觉场景融入到导览地图中，以便帮助学生更直观、轻松地在校园内导航。
+
+## 系统功能
+
+作为本次课程项目的主要产出，我们设计并开发了这款交互式Web平台。网站结构清晰，包含以下五个主要功能模块：
+
+* **首页（Home，图 2）：** 简要介绍工具背景，并提供前往核心导航功能的快速入口。
+* **交互式导航（Guide，图 1）：** 这是系统的核心功能。用户选择起点和终点后，平台会生成带有实景照片的路线。用户在查看地图的同时，可以通过照片对照现实场景，确认行进方向。特别是在容易迷路的关键交叉点，我们还加入了 360 度全景照片，方便用户全方位环顾四周，进一步提升了寻路的准确性。
+* **校园平面图（Lageplan）：** 提供详细的楼层平面图和校园总览，帮助用户在错综复杂的教学楼内快速定位。
+* **数据统计（Statistics，图 3）：** 对校园相关的数据进行了简单的可视化展示，作为导航系统的辅助信息补充。
+* **联系我们（Contact）：** 提供反馈渠道，方便用户联系团队获取支持或提供修改建议。
+
+<ZoomableImage 
+    src="/images/projects/picguide/Home.png" 
+    alt="PicGuide@TUM 首页" 
+    caption="图 2：系统首页"
+/>
+
+<ZoomableImage 
+    src="/images/projects/picguide/Statistics.png" 
+    alt="PicGuide@TUM 统计页面" 
+    caption="图 3：数据统计页面"
+/>
+
+## 总结
+
+虽然Web平台是用户交互的主要界面，但整个项目涵盖了从数据采集到多模态展示的完整开发流程。下方的课程海报总结了我们团队的具体工作：
+
+<ZoomableImage 
+    src="/images/projects/picguide/Poster.jpg" 
+    alt="PicGuide@TUM 项目海报" 
+    caption="图 4：详细展示工作流、数据采集和系统集成的课程项目海报。"
+/>
+
+* **数据采集：** 我们选取了主楼的五个主要入口，规划了通往常用教室和关键设施的路线，并沿途实地拍摄了带有地理坐标的实景照片。
+* **多媒介展示：** 除了网站，我们还设计了一份包含详细楼层图的折叠宣传册。此外，我们利用Unity重建了TUM校园的3D模型，并尝试加入了增强现实（AR）功能，以探索实时导航的更多可能性。
+* **用户测试：** 我们邀请了25名参与者对网站进行可用性测试。结果显示，参与者均能高效完成寻路任务，并对网站的易用性给出了积极正面的反馈。
+
+---
+*欢迎访问 [PicGuide@TUM 网站](https://picguide-tum.onrender.com/)，亲自体验这款校园导航工具。*

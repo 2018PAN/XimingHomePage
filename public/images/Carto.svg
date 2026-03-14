@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 75.91 101">
+  <!-- Generator: Adobe Illustrator 29.5.1, SVG Export Plug-In . SVG Version: 2.1.0 Build 141)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #c69989;
+      }
+
+      .st1 {
+        fill: #90b2a4;
+      }
+
+      .st2 {
+        fill: #d34f48;
+      }
+
+      .st3 {
+        fill: #b0d9c8;
+      }
+
+      .st4 {
+        fill: #13aecf;
+      }
+
+      .st5 {
+        fill: #f4baa8;
+      }
+
+      .st6 {
+        fill: #f9eeba;
+      }
+
+      .st7 {
+        fill: #c8b454;
+      }
+
+      .st8 {
+        fill: #79acb6;
+      }
+
+      .st9 {
+        fill: #6dbb97;
+      }
+
+      .st10 {
+        fill: #ab423a;
+      }
+
+      .st11 {
+        fill: #91d1df;
+      }
+
+      .st12 {
+        fill: #f6dd65;
+      }
+
+      .st13 {
+        fill: #158ea9;
+      }
+    </style>
+  </defs>
+  <path class="st3" d="M25.43,75.43H.43l25-25v25Z"/>
+  <path class="st1" d="M.43,50.43h25S.43,75.43.43,75.43v-25Z"/>
+  <path class="st8" d="M50.43,100.43h-25l25-25v25Z"/>
+  <path class="st11" d="M25.43,75.43h25s-25,25-25,25v-25Z"/>
+  <path class="st5" d="M75.43,25.43h-25L75.43.43v25Z"/>
+  <path class="st0" d="M50.43.43h25s-25,25-25,25V.43Z"/>
+  <path class="st2" d="M50.43.43v25S25.43.42,25.43.42h25Z"/>
+  <path class="st10" d="M25.43,25.42V.42s25,25.01,25,25.01h-25Z"/>
+  <path class="st6" d="M25.43,25.43H.43L25.43.43v25Z"/>
+  <path class="st12" d="M25.43,25.43v25S.43,25.42.43,25.42h25Z"/>
+  <path class="st9" d="M25.43,75.43v25S.43,75.42.43,75.42h25Z"/>
+  <path class="st7" d="M.43,50.42v-25s25,25.01,25,25.01H.43Z"/>
+  <path class="st4" d="M75.43,75.43v25s-25-25.01-25-25.01h25Z"/>
+  <path class="st13" d="M50.43,100.42v-25s25,25.01,25,25.01h-25Z"/>
+</svg>

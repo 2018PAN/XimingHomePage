@@ -1,0 +1,103 @@
+---
+title: "低成本传感器移动气象测绘"
+publishedAt: "2025-10-02"
+tag: ["embedded", "data-analysis"]
+hideHeaderImage: true
+summary: "德累斯顿工大野外实习项目。基于 ESP32-C6 自主研发的低成本移动气象站，集成了 GPS 与 BME280 传感器。我们在阿尔卑斯山徒步过程中进行实地测绘，并对温度、气压与高程数据进行了空间分析。"
+images:
+  - "/images/projects/weather-sensor/device.jpg"
+team:
+  - name: "Ximing Wang"
+    role: "Embedded Dev"
+    avatar: "/images/avatar.jpg"
+  - name: "Anthony Wong"
+    role: "Team Member"
+    avatar: "/images/projects/user.svg"
+  - name: "Alikhan Beisenbayev"
+    role: "Team Member"
+    avatar: "/images/projects/user.svg"
+  - name: "Artur Kislitsyn"
+    role: "Team Member"
+    avatar: "/images/projects/user.svg"
+---
+
+
+
+## 项目背景
+
+该项目是德累斯顿工业大学（TU Dresden）野外研讨会（Field Seminar）的一部分。我们的任务是研究阿尔卑斯山区的气候条件，并探索如何利用现代低成本传感器进行气象数据的移动测量。
+
+有别于传统的固定气象站，我们希望打造一个便携式的移动测绘设备。最终，我们团队选择从零开始——**从硬件采购、电路连接，到嵌入式 C++ 编程，再到高山徒步时的实地测绘**，独立完成了这套气象数据采集系统的开发。
+
+## 嵌入式开发
+
+系统的核心主控是一块 **ESP32-C6** 开发板，它负责统筹所有外部模块：
+* **BME280 环境传感器：** 通过 I2C 接口实时获取精准的温度、湿度和气压数据。
+* **GPS 模块：** 通过 UART 串口获取实时的经纬度、海拔高度（Alt）、卫星数量及 HDOP 精度因子。
+* **LCD 与 MicroSD 模块：** 利用 SPI 协议，将数据实时可视化渲染在屏幕上，并以 CSV 格式持久化记录到 SD 卡中。
+
+为了保证设备在野外长时间运行，我们利用普通的手机充电宝作为供电电源，并将其整体封装在一个透明的保护盒中。以下是我编写的核心数据循环采集与持久化代码片段：
+
+```cpp
+// 每 30 秒触发一次环境与空间数据采集，并写入 SD 卡
+if (millis() - lastLog > 30000) {
+  lastLog = millis();
+
+  // 读取 BME280 气象数据
+  float T = NAN, H = NAN, P = NAN;
+  if (bme.sensorID() != 0) {
+    T = bme.readTemperature();
+    H = bme.readHumidity();
+    P = bme.readPressure() / 100.0;
+  }
+
+  // 解析 GPS 空间位置与高程
+  bool hasFix = gps.location.isValid() && gps.location.age() < 3000;
+  double lat = hasFix ? gps.location.lat() : 0;
+  double lng = hasFix ? gps.location.lng() : 0;
+  bool hasAlt = gps.altitude.isValid();
+  double alt = hasAlt ? gps.altitude.meters() : 0;
+  
+  // 质量因子评估
+  int sats = gps.satellites.isValid() ? (int)gps.satellites.value() : -1;
+  double hdop = gps.hdop.isValid() ? gps.hdop.hdop() : -1;
+
+  // 将时间戳及各项参数追加至 CSV 日志
+  if (SD.begin(SD_CS_PIN, spiLCD)) {
+    appendCSV(T, H, P, hasFix, lat, lng, hasAlt, alt, sats, hdop);
+  } else {
+    Serial.println("[SD] not ready, skip logging.");
+  }
+}
+```
+
+## 实地测绘与数据分析
+
+在项目的三日行程中，我们带着这套设备深入阿尔卑斯山区进行了徒步测绘。期间设备稳定运行，屏幕实时反馈当前的坐标与气象状态，SD 卡默默记录下了数以千计的数据点。
+
+<Flex direction="row" gap="16" mobileDirection="column" fillWidth alignItems="flex-end">
+    <Flex flex={1} fillWidth justifyContent="center">
+        <ZoomableImage 
+            src="/images/projects/weather-sensor/device.jpg" 
+            alt="野外实拍图" 
+            caption="图 1：野外测绘实拍。设备由充电宝供电，LCD 屏幕实时显示当前高程、温湿度及卫星状态。"
+        />
+    </Flex>
+    <Flex flex={1} fillWidth justifyContent="center">
+        <ZoomableImage 
+            src="/images/projects/weather-sensor/data.jpg" 
+            alt="SD卡中采集到的 CSV 数据" 
+            caption="图 2：徒步结束后从 SD 卡导出的 CSV 数据，记录了随高程变化的精确气压与气温。"
+        />
+    </Flex>
+</Flex>
+
+在后期的分析环节，我们将这些 GPS 轨迹点与温湿度、气压数据进行了结合。作为互动教学（Hands-on task）的一部分，我们甚至让同学们尝试**通过测得的气压数据来反推计算当前的海拔高度**，验证了低成本传感器在地理环境分析中的实用价值，并制作海报进行汇报。
+<ZoomableImage 
+    src="/images/projects/weather-sensor/presentation.jpg" 
+    alt="项目展示 Slide" 
+    caption="图 3：我们的野外实习报告内容，探讨了高山气候测量方法及低成本传感器的应用。"
+/>
+## 总结
+
+这个跨学科项目让我受益匪浅。它不仅巩固了我的 C++ 硬件编程与底层通信协议（I2C/SPI/UART）的应用能力，更让我切身体会到了空间数据（Spatial Data）是如何从最原始的自然环境中被采集、清洗并最终用于可视化分析的全过程。

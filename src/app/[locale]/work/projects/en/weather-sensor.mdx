@@ -1,0 +1,103 @@
+---
+title: "Mobile Weather Mapping with Low-Cost Sensors"
+publishedAt: "2025-10-02"
+tag: ["embedded", "data-analysis"]
+hideHeaderImage: true
+summary: "A field seminar project at TU Dresden. We developed a low-cost mobile weather station based on the ESP32-C6, integrating GPS and BME280 sensors. We conducted field mapping during a hiking trip in the Alps and performed spatial analysis on the collected temperature, pressure, and elevation data."
+images:
+  - "/images/projects/weather-sensor/device.jpg"
+team:
+  - name: "Ximing Wang"
+    role: "Embedded Dev"
+    avatar: "/images/avatar.jpg"
+  - name: "Anthony Wong"
+    role: "Team Member"
+    avatar: "/images/projects/user.svg"
+  - name: "Alikhan Beisenbayev"
+    role: "Team Member"
+    avatar: "/images/projects/user.svg"
+  - name: "Artur Kislitsyn"
+    role: "Team Member"
+    avatar: "/images/projects/user.svg"
+---
+
+## Project Background
+
+This project was part of a Field Seminar at TU Dresden. Our task was to study the climate conditions in the Alpine region and explore how to utilize modern low-cost sensors for mobile weather data measurement.
+
+Unlike traditional stationary weather stations, we aimed to build a portable mobile mapping device. Ultimately, our team chose to start from scratch—**from hardware procurement and circuit wiring, to embedded C++ programming, and finally to field mapping during an alpine hike**—independently completing the development of this meteorological data acquisition system.
+
+## Embedded Development
+
+The core controller of the system is an **ESP32-C6** development board, which coordinates all external modules:
+* **BME280 Environmental Sensor:** Acquires precise temperature, humidity, and air pressure data in real-time via the I2C interface.
+* **GPS Module:** Obtains real-time latitude, longitude, altitude (Alt), satellite count, and HDOP precision factor via UART.
+* **LCD & MicroSD Modules:** Utilizes the SPI protocol to render data visually on the screen in real-time and persistently log it to the SD card in CSV format.
+
+To ensure the device could operate in the field for extended periods, we used a standard power bank as the power supply and enclosed the entire setup in a transparent protective case. Below is the core data loop collection and persistence code snippet I wrote:
+
+```cpp
+// Trigger environmental and spatial data collection every 30 seconds and write to SD card
+if (millis() - lastLog > 30000) {
+  lastLog = millis();
+
+  // Read BME280 meteorological data
+  float T = NAN, H = NAN, P = NAN;
+  if (bme.sensorID() != 0) {
+    T = bme.readTemperature();
+    H = bme.readHumidity();
+    P = bme.readPressure() / 100.0;
+  }
+
+  // Parse GPS spatial position and altitude
+  bool hasFix = gps.location.isValid() && gps.location.age() < 3000;
+  double lat = hasFix ? gps.location.lat() : 0;
+  double lng = hasFix ? gps.location.lng() : 0;
+  bool hasAlt = gps.altitude.isValid();
+  double alt = hasAlt ? gps.altitude.meters() : 0;
+  
+  // Quality factor assessment
+  int sats = gps.satellites.isValid() ? (int)gps.satellites.value() : -1;
+  double hdop = gps.hdop.isValid() ? gps.hdop.hdop() : -1;
+
+  // Append timestamp and parameters to CSV log
+  if (SD.begin(SD_CS_PIN, spiLCD)) {
+    appendCSV(T, H, P, hasFix, lat, lng, hasAlt, alt, sats, hdop);
+  } else {
+    Serial.println("[SD] not ready, skip logging.");
+  }
+}
+```
+
+## Field Mapping & Data Analysis
+
+During the project's three-day itinerary, we took this device deep into the Alps for a hiking mapping expedition. The device operated stably throughout, with the screen providing real-time feedback on current coordinates and weather status, while the SD card silently recorded thousands of data points.
+
+<Flex direction="row" gap="16" mobileDirection="column" fillWidth alignItems="flex-end">
+    <Flex flex={1} fillWidth justifyContent="center">
+        <ZoomableImage 
+            src="/images/projects/weather-sensor/device.jpg" 
+            alt="Field mapping in action" 
+            caption="Figure 1: Field mapping in action. Powered by a power bank, the LCD screen displays real-time altitude, temperature, humidity, and satellite status."
+        />
+    </Flex>
+    <Flex flex={1} fillWidth justifyContent="center">
+        <ZoomableImage 
+            src="/images/projects/weather-sensor/data.jpg" 
+            alt="CSV data exported from the SD card" 
+            caption="Figure 2: CSV data exported from the SD card after the hike, recording precise air pressure and temperature changes alongside altitude."
+        />
+    </Flex>
+</Flex>
+
+In the post-analysis phase, we integrated these GPS trajectory points with the temperature, humidity, and air pressure data. As part of a hands-on task, we even had students attempt to **calculate the current altitude by reverse-engineering the measured air pressure data**, validating the practical value of low-cost sensors in geographic environment analysis, and created a poster to present our findings.
+
+<ZoomableImage 
+    src="/images/projects/weather-sensor/presentation.jpg" 
+    alt="Project Presentation Slide" 
+    caption="Figure 3: Our field seminar presentation poster, discussing alpine climate measurement methods and the application of low-cost sensors."
+/>
+
+## Conclusion
+
+This interdisciplinary project benefited me immensely. It not only solidified my skills in C++ hardware programming and low-level communication protocols (I2C/SPI/UART), but also gave me firsthand experience of the entire process of how Spatial Data is collected from raw natural environments, cleaned, and ultimately used for visual analysis.

@@ -1,0 +1,48 @@
+{
+  "locale": "zh",
+  "Header": {
+    "home": "首页",
+    "about": "关于我",
+    "work": "项目展示",
+    "blog": "博客",
+    "gallery": "画廊"
+  },
+  "home": {
+    "title": "王晰明的个人主页",
+    "description": "空间数据分析师与制图师的作品集"
+  },
+  "about": {
+    "title": "关于我",
+    "description": "关于王晰明的个人简介与教育背景"
+  },
+  "blog": {
+    "label": "博客",
+    "title": "随笔与技术分享",
+    "description": "阅读最近的动态"
+  },
+  "work": {
+    "label": "项目展示",
+    "title": "我的项目",
+    "description": "空间数据与设计项目"
+  },
+  "gallery": {
+    "label": "画廊",
+    "title": "我的摄影集",
+    "description": "视觉记录"
+  },
+  "projectCard": {
+    "label": "了解更多",
+    "link": "访问项目链接"
+  },
+  "tags": {
+    "map-visualization": "地图可视化",
+    "web-dev": "网页开发",
+    "app-dev": "移动应用开发",
+    "data-analysis": "数据分析",
+    "algorithm": "算法研究",
+    "ui-ux": "UI/UX 设计",
+    "gis": "地理信息系统"
+  },
+  "Europe/Berlin": "欧洲 / 柏林",
+  "Asia/Shanghai": "中国 / 上海"
+}

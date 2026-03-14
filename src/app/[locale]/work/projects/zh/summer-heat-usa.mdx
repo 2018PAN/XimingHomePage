@@ -1,0 +1,36 @@
+---
+title: "美国夏季高温双变量地图"
+publishedAt: "2026-02-10"
+tag: ["cartography", "data-visualization", "gis"]
+hideHeaderImage: true
+summary: "双变量地图，直观呈现了美国本土近五年的夏季平均气温，及其相对过去 20 年的区域变暖趋势。"
+images:
+  - "/images/projects/summer-heat-usa/map.png"
+team:
+  - name: "Ximing Wang"
+    role: "Cartographer"
+    avatar: "/images/avatar.jpg"
+---
+
+<ZoomableImage 
+    src="/images/projects/summer-heat-usa/map.png" 
+    alt="Five Years of Summer Heat Map" 
+    caption="图 1：Five Years of Summer Heat —— 美国夏季气温与变暖趋势地图。"
+/>
+
+## 项目简介
+
+地图聚焦于美国本土，直观地呈现了当前（2021–2025年）的夏季平均气温情况，并对比了 20 年前（2001–2005年）的历史数据，展示了各个地区气候变暖的剧烈程度。
+
+
+为了在同一张地图上清晰地表达两个不同维度的数据，本设计采用了**双变量符号系统**，通过点阵网格的视觉变量来传递信息：
+
+* **颜色深浅：** 代表 2021–2025 年期间的夏季绝对平均气温。紫红色越深，代表该地区夏季越炎热（例如德克萨斯州和南部地区）。
+* **圆点大小：** 代表该地区相对于 2001–2005 年的气温上升幅度。圆点越大，说明该地区在过去 20 年里变暖的速度越快、趋势越显著。
+
+## 制作流程
+
+在制图流程上，本地图使用了 ArcGIS Pro 和 Adobe Illustrator。
+
+1. **ArcGIS Pro：** 负责前期的底层数据处理。包括 NOAA 气候数据的空间连接（Spatial Join）、网格化处理以及双变量图层的初步生成。
+2. **Adobe Illustrator：** 负责后期的视觉呈现与排版。在 AI 中，我对基础地图进行了美化，设计了自解释性极强的双变量图例，并添加了背景阴影与文字标注，使整幅地图更具阅读性和美感。

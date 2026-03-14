@@ -1,0 +1,63 @@
+---
+title: "Eat Your Way in Vienna"
+publishedAt: "2025-06-18"
+tag: ["web-dev", "gis"]
+hideHeaderImage: true
+summary: "The final project for the Cartographic Information Systems (CIS) course at TU Wien, covering the complete WebGIS development workflow from PostGIS database processing and GeoServer service publishing to Leaflet frontend interaction."
+images:
+  - "/images/projects/eatinvienna/1.png"
+  - "/images/projects/eatinvienna/3.png"
+team:
+  - name: "Ximing Wang"
+    avatar: "/images/avatar.jpg"
+---
+
+
+## Background
+
+This is my final project for the "Cartographic Information Systems (CIS)" course at TU Wien. The goal was to create an interactive map that not only helps users find restaurants, cafés, and bars in the city center but also highlights nearby parks and green spaces, making it easy to find a place to relax after grabbing some fast food.
+
+## Spatial Database SQL
+
+The core challenge of this project lay in the underlying data processing. I imported raw OpenStreetMap (OSM) data into a PostgreSQL database and used the **PostGIS** extension for spatial analysis.
+
+Because the raw data was massive (containing hundreds of fields), I wrote SQL scripts to extract useful information, such as cleaning up categories and calculating park areas. To make the map load faster on the web, I also created spatial indexes specifically for the data:
+
+```sql
+-- Create a spatial index to significantly boost frontend map rendering speed
+CREATE INDEX idx_leisure_parks_geom
+ON leisure_parks USING GIST (geom);
+```
+
+After cleaning the data in the database, I used **GeoServer** to publish them as web map services (WMS).
+
+To make the map look more intuitive, I wrote SLD (Styled Layer Descriptor) files to assign custom icons to different types of locations (e.g., a coffee cup for cafés, a glass for bars), and packaged all the layers together for frontend consumption.
+
+## Frontend Interaction
+
+The frontend of the webpage was built using HTML, CSS, JavaScript, and **Leaflet**. I focused on implementing the following features:
+
+* **Dynamic Filtering:** Added dropdown menus allowing users to easily filter and view only the types of dining or green spaces they are interested in.
+* **Feature Details:** Clicking on a map icon immediately triggers an API call to display detailed information in the sidebar (such as cuisine type, opening hours, and wheelchair accessibility).
+
+<ZoomableImage 
+    src="/images/projects/eatinvienna/1.png" 
+    alt="Overview of the Vienna Food Map" 
+    caption="Figure 1: Overview of the inner-city dining and leisure green spaces distribution in Vienna."
+/>
+
+<ZoomableImage 
+    src="/images/projects/eatinvienna/2.png" 
+    alt="Map Filtering Feature" 
+    caption="Figure 2: Dynamically filtering cafés and gardens on the map."
+/>
+
+<ZoomableImage 
+    src="/images/projects/eatinvienna/3.png" 
+    alt="Sidebar Detail View" 
+    caption="Figure 3: Filtering fast food and parks, and displaying location-specific details (like Five Guys' opening hours and address) in the sidebar upon clicking."
+/>
+
+## Conclusion
+
+This was a highly practical hands-on project. It helped me completely master the full-stack WebGIS development loop—from the lowest-level PostgreSQL/PostGIS spatial data cleaning, to server-side GeoServer rendering, and finally to frontend map interaction implementation.

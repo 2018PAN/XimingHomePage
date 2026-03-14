@@ -1,0 +1,90 @@
+---
+title: "C-ITS 车辆数据可视化：萨尔茨堡交通"
+publishedAt: "2025-06-27"
+tag: ["data-visualization", "web-dev", "gis"]
+hideHeaderImage: true
+link: "https://2018pan.github.io/C-ITS_Visulisation/trajectories.html"
+summary: "维也纳工业大学 Location-Based Service 课程结课项目。通过处理和分析海量 C-ITS 车辆通信数据，利用地图匹配算法与交互式 Web 看板，直观呈现萨尔茨堡的交通状况与突发事件。"
+images:
+  - "/images/projects/cits-salzburg/dashboard.png"
+team:
+  - name: "Ximing Wang"
+    role: "Data Analysis & Web Developer"
+    avatar: "/images/avatar.jpg"
+  - name: "Devita Remala Sari"
+    role: "Presentation"
+    avatar: "/images/projects/user.svg"
+  - name: "Paula Martín Castillo"
+    role: "Report Writing"
+    avatar: "/images/projects/user.svg"
+  - name: "Suphaphong Sirinapaphan"
+    role: "PM & Visualization Design"
+    avatar: "/images/projects/user.svg"
+---
+
+<ZoomableImage 
+    src="/images/projects/cits-salzburg/dashboard.png" 
+    alt="C-ITS 交通可视化看板" 
+    caption="图 1：结合路网车速与交通事故热力图的综合交互看板。"
+/>
+
+
+
+## 项目背景
+
+这是我在维也纳工业大学 Location-Based Service 课程的结课项目。在这个项目中，我们聚焦于协作式智能交通系统（C-ITS），目标是开发一个交互式的可视化平台，用于分析奥地利萨尔茨堡早高峰的交通动态, 因数据量问题，只选取早上 7:00-8:00时间段。
+
+该系统结合了两种关键的车联网通信数据：提供车辆实时位置和速度的 **CAM（协作感知消息）**，以及预警交通事故或道路施工的 **DENM（分散式环境通知消息）**。
+
+## 数据处理与地图匹配
+
+在这个团队项目中，我主要负责核心的编程、数据处理与 Web 可视化 。原始的 GPS 数据非常庞杂且存在误差，为了让前端地图流畅渲染，我在后端构建了严谨的处理流程：
+
+* **数据清洗：** 剔除了缺乏时间戳、HDOP 大于 5 或存在异常超速（大于 55 m/s）的无效 GPS 记录，并进行了移动平均平滑与插值处理，消除轨迹漂移。
+* **地图匹配：** 我们提取了 OpenStreetMap 的可行驶路网数据。为了将多达 10 万个 GPS 轨迹点精准、快速地匹配到 40 万条道路片段上，我构建了 **R-Tree 空间索引**，极大地提升了最近邻查询效率。
+```python
+for p in cam_points:
+    pt = Point(p['longitude'], p['latitude'])
+    best_dist = float('inf')
+    # 使用 R-Tree 索引快速过滤候选路段
+    for rid in idx.intersection((pt.x, pt.y, pt.x, pt.y)):
+        way_id, line = lines[rid]
+        d = line.distance(pt)
+        if d < best_dist:
+            best_dist, best_way = d, way_id
+    p['way_id'] = best_way
+```
+* **路段车速聚合：** 将匹配后的点位按照道路 ID 分组，计算出每条路段的加权平均车速，将其转化为轻量级的 JSON 。
+
+## 系统功能
+
+网页端主要分为 **Trajectories（车辆轨迹视图）** 和 **Dashboard（综合分析看板）** 两个核心模块。其中，Dashboard 是整个平台的数据交互中心，为用户提供了极高自由度的探索体验：
+
+* **多维数控制台：** 用户可以通过侧边栏自由筛选交通工具的种类（如乘用车、货车、应急车辆等）。通过拖动时间轴滑块，系统会根据选定的特定时段，展示该时段内的总体数据和路段平均车速。
+* **图层组合：** 地图支持四种核心信息图层的自由叠加与切换：
+  * **交通流量 (Traffic Flows)：** 基于所选时段车速分级着色的动态路网。
+  * **热力图 (Heatmap)：** 直观呈现交通事故与异常路况的高发区域。
+  * **交通事故点 (Traffic Incidents)：** 精准定位并分类标注道路上的各类突发事件。
+  * **事故轨迹溯源 (Incident Traces)：** 创新性地叠加事故发生前 30 秒的车辆行驶轨迹，辅助分析事故成因与车辆行为。
+* **数据交互：** 地图不仅提供宏观概览，还支持微观数据查看。当用户将鼠标移动或点击到具体的交通事故点或道路片段时，会立刻浮现出该对象的底层数据，如对应的 ID、精确的平均速度、事件/车辆种类等。
+
+
+
+<ZoomableImage 
+    src="/images/projects/cits-salzburg/trajectory.png" 
+    alt="车辆原始轨迹视图" 
+    caption="图 2：车辆原始轨迹视图 (Trajectory View)。"
+/>
+
+<ZoomableImage 
+    src="/images/projects/cits-salzburg/heatmap.png" 
+    alt="车辆原始轨迹视图" 
+    caption="图 3：选定时段交通流量及事故热力图展示。"
+/>
+
+## 总结
+
+这个项目成功将碎片化的车联网通信底层数据（V2X）转化为了具有实际分析价值的交通监控平台。它不仅深入锻炼了我在海量空间数据清洗、R-Tree 算法应用方面的后端处理能力，也让我体验了如何通过直观的 Web 交互设计来辅助城市交通的评估与异常检测。
+
+---
+*项目演示： 欢迎访问 [C-ITS 交通看板](https://2018pan.github.io/C-ITS_Visulisation/trajectories.html) ，探索萨尔茨堡早高峰的交通数据。*

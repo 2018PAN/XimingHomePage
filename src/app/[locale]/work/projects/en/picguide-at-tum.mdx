@@ -1,0 +1,77 @@
+---
+title: "PicGuide@TUM: Picture-Guided Campus Navigation"
+publishedAt: "2025-02-15"
+tag: ["web-dev", "ui-ux"]
+hideHeaderImage: true
+link: "https://picguide-tum.onrender.com/"
+summary: "A class project for the TUM Mapping Project course: an interactive web platform designed to help students intuitively navigate the complex campus using real-world spatial context."
+images:
+  - "/images/projects/picguide/Home.png"
+  - "/images/projects/picguide/Guide.png"
+team:
+  - name: "Ximing Wang"
+    role: "Developer"
+    avatar: "/images/avatar.jpg"
+  - name: "Weiyi Gao"
+    role: "Collaborator"
+    avatar: "/images/projects/user.svg"
+  - name: "Lingyu Tang"
+    role: "Collaborator"
+    avatar: "/images/projects/user.svg"
+  - name: "Ching Yeung Wong"
+    role: "Collaborator"
+    avatar: "/images/projects/user.svg"
+---
+
+<ZoomableImage 
+    src="/images/projects/picguide/Guide.png" 
+    alt="PicGuide@TUM Guide Interface" 
+    caption="Figure 1: The core routing interface providing real-world picture guidance."
+/>
+
+## Background
+
+With its complex layout and numerous connections between buildings, navigating the TUM (Technische Universität München) campus can be overwhelming, particularly for new students unfamiliar with its layout. Current guiding tools often provide abstract representations of space but lack sufficient real-world cues to help users identify specific locations.
+
+To address this issue, our team developed **PicGuide@TUM** as part of the Winter Semester 2024/2025 Mapping Project. The system incorporates real-world spatial context into a picture-guided map system, aiding users in recognizing and navigating their way around the TUM campus.
+
+## Web Features
+
+As the principal output of our project, we developed an interactive web platform. The website is structured to provide a seamless user experience across five main functional areas:
+
+* **Home Dashboard (`Figure 2`):** The landing page introduces the tool and provides quick access to the navigation features.
+* **Interactive Guide (`Figure 1`):** This is the core functionality. Users can select their start and end points. The web platform offers routes with pictures, allowing users to visually confirm their path step-by-step alongside the map view. Notably, we integrated **360-degree panoramic photos** at key intersections, enabling users to look around and easily orient themselves in complex areas.
+* **Lageplan:** Provides detailed floor plans and a comprehensive campus map, helping users quickly orient themselves within the complex university buildings.
+* **Statistics (`Figure 3`):** This section visualizes underlying data related to the campus, offering analytical insights into the navigation system.
+* **Contact:** Offers a direct channel for users to reach out to the development team for support, feedback, or further inquiries.
+
+
+<ZoomableImage 
+  src="/images/projects/picguide/Home.png" 
+  alt="PicGuide@TUM Home Page" 
+  caption="Figure 2: The Home Page."
+/>
+
+<ZoomableImage 
+  src="/images/projects/picguide/Statistics.png" 
+  alt="PicGuide@TUM Statistics Page" 
+  caption="Figure 3: The Statistics Dashboard."
+/>    
+
+
+## Conclusion
+
+While the web platform serves as the primary user interface, the project covers a complete workflow from data collection to multimodal visualization. The poster below summarizes our team's work:
+
+<ZoomableImage 
+    src="/images/projects/picguide/Poster.jpg" 
+    alt="PicGuide@TUM Project Poster" 
+    caption="Figure 4: Project Poster detailing the workflow, data collection, and system integration."
+/>
+
+* **Data Collection:** We captured geotagged photos along the routes connecting five primary entrance points to popular classrooms and key facilities.
+* **Multimodal Integration:** Beyond the website, we designed a foldable brochure with detailed floor plans. We also reconstructed a 3D model of TUM and integrated an Augmented Reality (AR) feature using Unity for real-time guidance.
+* **User Testing:** We tested the website's navigation with 25 participants. The results showed that participants efficiently completed tasks and gave highly positive feedback on the website's usability.
+
+---
+*To experience the interactive navigation tool, please visit the full [PicGuide@TUM website](https://picguide-tum.onrender.com/).*
