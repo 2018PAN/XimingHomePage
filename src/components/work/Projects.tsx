@@ -82,7 +82,6 @@ export function Projects({ projects, range, locale }: ProjectsProps) {
             {allTags.length > 0 && (
                 <Flex direction="column" marginBottom="48">
                     
-                    {/* 🚀 桌面端布局：hide="s" (手机隐藏)，保持原来的平铺样式 */}
                     <Flex hide="s" direction="column" gap="16">
                         <Text variant="body-default-m" onBackground="neutral-weak">
                             {locale === 'zh' ? '项目筛选' : 'Filter by'}

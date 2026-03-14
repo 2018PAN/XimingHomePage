@@ -141,6 +141,21 @@ export default function TravelGlobe({ mapboxToken, locale }: { mapboxToken: stri
         });
       }
 
+      // 隐形的巨大触控层，用于扩大手机端点击判定范围
+      if (!m.getLayer('city-dots-hitbox')) {
+        m.addLayer({
+          id: 'city-dots-hitbox',
+          type: 'circle',
+          source: 'my-footprints',
+          filter: ['==', ['get', 'type'], 'city'],
+          paint: {
+            'circle-radius': 20,    
+            'circle-color': '#000000', 
+            'circle-opacity': 0 
+          }
+        });
+      }
+
       updateMapLanguageAndCleanUp(m, localeRef.current);
     };
 
@@ -148,7 +163,8 @@ export default function TravelGlobe({ mapboxToken, locale }: { mapboxToken: stri
 
     const popup = new mapboxgl.Popup({ closeButton: false, closeOnClick: false, offset: 12 });
 
-    // 提取一个公共的“显示弹窗”函数，避免代码重复
+    let popupTimeout: NodeJS.Timeout | null = null;
+
     const showCityPopup = (e: any) => {
       if (!map.current || !e.features || e.features.length === 0) return;
       
@@ -160,37 +176,43 @@ export default function TravelGlobe({ mapboxToken, locale }: { mapboxToken: stri
         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
       }
 
+      if (popupTimeout) {
+        clearTimeout(popupTimeout);
+        popupTimeout = null;
+      }
+
       popup.setLngLat(coordinates as [number, number])
            .setHTML(`<div class="custom-city-popup">${cityName || 'Unknown'}</div>`)
            .addTo(map.current);
     };
 
-    // 电脑端逻辑：依然保持悬停 (Hover) 体验
-    map.current.on('mouseenter', 'city-dots-core', (e) => {
+    map.current.on('mouseenter', 'city-dots-hitbox', (e) => {
       if (!map.current) return;
       map.current.getCanvas().style.cursor = 'pointer';
-      // 只有屏幕大于 768px 才触发悬停显示
-      if (window.innerWidth >= 768) showCityPopup(e);
+      
+      if (window.innerWidth >= 768) {
+        showCityPopup(e);
+      }
     });
 
-    map.current.on('mouseleave', 'city-dots-core', () => {
+    map.current.on('mouseleave', 'city-dots-hitbox', () => {
       if (!map.current) return;
       map.current.getCanvas().style.cursor = '';
-      if (window.innerWidth >= 768) popup.remove();
+      
+      if (window.innerWidth >= 768) {
+        popupTimeout = setTimeout(() => {
+          popup.remove();
+        }, 150); 
+      }
     });
 
-    // 手机端逻辑：使用点击 (Click) 实现点对点丝滑切换
-    map.current.on('click', 'city-dots-core', (e) => {
-      // 手机屏幕下，点击城市圆点直接显示（自动覆盖旧的 popup）
+    map.current.on('click', 'city-dots-hitbox', (e) => {
       if (window.innerWidth < 768) showCityPopup(e);
     });
 
-    // 手机端逻辑：点击地图海洋/空白处时，自动隐藏弹窗
     map.current.on('click', (e) => {
       if (window.innerWidth < 768 && map.current) {
-        // 探测鼠标点击的位置下面有没有 'city-dots-core' 图层
-        const features = map.current.queryRenderedFeatures(e.point, { layers: ['city-dots-core'] });
-        // 如果没点到城市（点到了空白处），就关闭弹窗
+        const features = map.current.queryRenderedFeatures(e.point, { layers: ['city-dots-hitbox'] });
         if (!features || features.length === 0) {
           popup.remove();
         }
