@@ -73,7 +73,7 @@ export default function TravelGalleryPage(
             min-height: 100vw !important; 
             max-height: 65vh !important;
             
-            margin-top: -30px !important; 
+            margin-top: -0px !important; 
           }
         }
       `}</style>

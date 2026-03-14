@@ -278,36 +278,98 @@ export default function TravelGlobe({ mapboxToken, locale }: { mapboxToken: stri
         }
         .mapboxgl-popup-tip { border-top-color: rgba(20, 20, 20, 0.6) !important; }
         .custom-city-popup { color: #ffffff; font-size: 0.95rem; font-weight: 500; letter-spacing: 0.05em; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+
+        /* 🚀 新增：图例的电脑端样式 (左下角垂直排布) */
+        .map-legend {
+          position: absolute;
+          bottom: 40px;
+          left: 20px;
+          z-index: 10;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+          padding: 24px;
+          border-radius: 16px;
+          background: var(--neutral-alpha-weak);
+          backdrop-filter: blur(12px);
+          border: 1px solid var(--neutral-alpha-medium);
+          pointer-events: none;
+        }
+        .legend-item {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+        .legend-icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 18px;
+          height: 18px;
+        }
+        .legend-text {
+          font-size: 0.95rem;
+          color: var(--neutral-on-background-medium);
+          font-weight: 500;
+          letter-spacing: 0.02em;
+          white-space: nowrap;
+        }
+
+        /* 🚀 新增：图例的手机端样式 (底部居中横向胶囊) */
+        @media (max-width: 768px) {
+          .map-legend {
+            bottom: 16px; /* 贴近底部 */
+            left: 50%;
+            transform: translateX(-50%); /* 强制水平居中 */
+            flex-direction: row; /* 改为横向排列 */
+            padding: 10px 16px;
+            border-radius: 50px; /* 圆润的胶囊形状 */
+            gap: 16px; /* 缩小各项之间的间距 */
+            width: max-content;
+          }
+          .legend-item {
+            gap: 6px; /* 缩小图标和文字的间距 */
+          }
+          .legend-text {
+            font-size: 0.75rem; /* 字体改小，显得精致 */
+          }
+          .legend-icon {
+            transform: scale(0.85); /* 整体等比缩小图标 */
+          }
+        }
       `}</style>
       
       <div ref={mapContainer} style={{ width: '100%', height: '100%' }} />
 
-      <div style={{ position: 'absolute', bottom: '40px', left: '20px', zIndex: 10, display: 'flex', flexDirection: 'column', gap: '16px', padding: '24px', borderRadius: '16px', background: 'var(--neutral-alpha-weak)', backdropFilter: 'blur(12px)', border: '1px solid var(--neutral-alpha-medium)', pointerEvents: 'none' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ width: '18px', height: '18px', background: 'rgba(45, 212, 191, 0.4)', border: '1px solid rgba(45, 212, 191, 0.8)', borderRadius: '4px' }}></div>
-          <span style={{ fontSize: '0.95rem', color: 'var(--neutral-on-background-medium)', fontWeight: 500, letterSpacing: '0.02em' }}>
+      {/* 🚀 把之前写死在 style 里的样式全部换成 className */}
+      <div className="map-legend">
+        
+        <div className="legend-item">
+          <div className="legend-icon" style={{ background: 'rgba(45, 212, 191, 0.4)', border: '1px solid rgba(45, 212, 191, 0.8)', borderRadius: '4px' }}></div>
+          <span className="legend-text">
             {locale.includes('zh') ? '去过的国家' : 'Visited Countries'}
           </span>
         </div>
         
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ position: 'relative', width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            {/* 底层透明光晕 */}
+        <div className="legend-item">
+          <div className="legend-icon" style={{ position: 'relative' }}>
             <div style={{ position: 'absolute', width: '16px', height: '16px', borderRadius: '50%', backgroundColor: 'rgba(15, 118, 110, 0.4)' }}></div>
-            {/* 顶层实心带描边圆点 */}
             <div style={{ position: 'absolute', width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#ffffff', border: '1.5px solid #0F766E' }}></div>
           </div>
-          <span style={{ fontSize: '0.95rem', color: 'var(--neutral-on-background-medium)', fontWeight: 500, letterSpacing: '0.02em' }}>
+          <span className="legend-text">
             {locale.includes('zh') ? '去过的城市' : 'Visited Cities'}
           </span>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ width: '18px', height: '0px', borderTop: '2.5px dashed #0F766E' }}></div>
-          <span style={{ fontSize: '0.95rem', color: 'var(--neutral-on-background-medium)', fontWeight: 500, letterSpacing: '0.02em' }}>
+        <div className="legend-item">
+          <div className="legend-icon">
+            <div style={{ width: '18px', borderTop: '2.5px dashed #0F766E' }}></div>
+          </div>
+          <span className="legend-text">
             {locale.includes('zh') ? '飞机航线' : 'Flight Routes'}
           </span>
         </div>
+
       </div>
     </div>
   );
