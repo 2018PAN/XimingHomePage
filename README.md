@@ -1,4 +1,4 @@
-# 🚀 Ximing's Digital Garden | 个人主页
+# Ximing's Digital Garden | 个人主页
 
 <div align="center">
   <img src="./public/images/demo.jpg" alt="Ximing's Homepage Preview" width="800">
@@ -16,7 +16,7 @@
 
 ## ✨ 核心特性 (Key Features)
 
-- 🌍 **Full i18n Support**: 基于 `next-intl` 实现全站中英双语无缝切换。
+- 🌍 **Full i18n muti-language Support**: 基于 `next-intl` 实现全站中英双语无缝切换。
 - 📍 **Travel Globe**: 基于 Mapbox 的 3D 差旅轨迹球，记录我的飞行与足迹。
 - 📱 **Mobile Optimized**: 深度定制的移动端折叠菜单与 UI 适配，符合人体工学的交互设计。
 - 🌓 **Theme Switcher**: 丝滑的深色/浅色模式切换。

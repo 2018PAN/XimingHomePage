@@ -16,6 +16,9 @@ export default function CrosshairWrapper({
   const crosshairYRef = useRef<HTMLDivElement>(null);
 
   const handleMouseMove = (e: React.MouseEvent) => {
+    // 如果是手机屏幕尺寸（宽度小于 768px），直接终止函数
+    if (typeof window !== 'undefined' && window.innerWidth < 768) return;
+
     // 鼠标在组件内部移动时，获取鼠标相对于整个浏览器窗口 (Viewport) 的坐标
     if (!crosshairXRef.current || !crosshairYRef.current) return;
 
@@ -39,10 +42,13 @@ export default function CrosshairWrapper({
 
   return (
     <>
+      {/* 加上 @media 媒体查询，只有在电脑端（>=768px）才强制隐藏默认鼠标指针 */}
       <style>{`
-        .force-hide-cursor,
-        .force-hide-cursor * {
-          cursor: none !important;
+        @media (min-width: 768px) {
+          .force-hide-cursor,
+          .force-hide-cursor * {
+            cursor: none !important;
+          }
         }
       `}</style>
 
@@ -69,7 +75,7 @@ export default function CrosshairWrapper({
             backgroundColor: 'rgba(16, 185, 129, 0.6)', 
             pointerEvents: 'none', 
             transition: 'opacity 0.2s ease-out',
-            opacity: 0,
+            opacity: 0, // 初始透明度为 0
             zIndex: 99999 // 极高层级，保证盖住页面外围的内容
           }}
         />
@@ -85,13 +91,11 @@ export default function CrosshairWrapper({
             backgroundColor: 'rgba(16, 185, 129, 0.6)',
             pointerEvents: 'none',
             transition: 'opacity 0.2s ease-out',
-            opacity: 0,
+            opacity: 0, // 初始透明度为 0
             zIndex: 99999
           }}
         />
-        {/* ============================================== */}
 
-        {/* 渲染 TravelGlobe */}
         {children}
       </div>
     </>
