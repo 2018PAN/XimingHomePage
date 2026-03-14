@@ -48,18 +48,50 @@ export default function TravelGalleryPage(
   return (
     <Flex direction="column" fillWidth style={{ minHeight: 'calc(100vh - 80px)', display: 'flex' }}>
       
-      <Flex direction="column" alignItems="center" marginBottom="48">
-        <p style={{ fontSize: '1.5rem', fontWeight: 600 }}>
+      {/* 🚀 核心修改：加入响应式 CSS 样式 */}
+      <style>{`
+        .responsive-header {
+          margin-bottom: 48px;
+          font-size: 1.5rem;
+          margin-top: 16px;
+        }
+        .responsive-map-container {
+          min-height: 500px;
+        }
+        
+        /* 当屏幕宽度小于 768px (手机端) 时，自动应用以下样式 */
+        @media (max-width: 768px) {
+          .responsive-header {
+            margin-bottom: 0px !important; 
+            margin-top: 8px !important;
+            font-size: 1.15rem !important;
+            position: relative;
+            z-index: 20; 
+          }
+          
+          .responsive-map-container {
+            min-height: 100vw !important; 
+            max-height: 65vh !important;
+            
+            margin-top: -30px !important; 
+          }
+        }
+      `}</style>
+
+      {/* 🚀 移除了写死的 marginBottom="48" 和内联的 fontSize，改用 className 接管 */}
+      <Flex direction="column" alignItems="center" className="responsive-header">
+        <p style={{ fontWeight: 600, margin: 0 }}>
           <ShinyText 
             text={gallery.description} 
-            color="var(--neutral-medium)" // 使用你原来的颜色作为基础底色
-            shineColor="#10b981"          // 高亮颜色设为科技绿，与准星呼应 (也可改成 #ffffff)
-            speed={3}                     // 动画持续时间，单位秒，可以自行调节
+            color="var(--neutral-medium)"
+            shineColor="#10b981"
+            speed={3}
           />
         </p>
       </Flex>
 
-      <div style={{ flex: 1, width: '100%', minHeight: '500px', display: 'flex', justifyContent: 'center' }}>
+      {/* 给地图容器也加上了响应式 class */}
+      <div className="responsive-map-container" style={{ flex: 1, width: '100%', display: 'flex', justifyContent: 'center' }}>
         <CrosshairWrapper 
           style={{ width: '100%', maxWidth: '1400px', height: '100%', borderRadius: '16px' }}
         >

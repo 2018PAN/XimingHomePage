@@ -119,9 +119,9 @@ export default function TravelGlobe({ mapboxToken, locale }: { mapboxToken: stri
           source: 'my-footprints',
           filter: ['==', ['get', 'type'], 'city'],
           paint: {
-            'circle-radius': 8, // 底层光晕大一点
+            'circle-radius': 8,
             'circle-color': '#0F766E',
-            'circle-opacity': 0.4 // 半透明
+            'circle-opacity': 0.4
           }
         });
       }
@@ -133,15 +133,17 @@ export default function TravelGlobe({ mapboxToken, locale }: { mapboxToken: stri
           source: 'my-footprints',
           filter: ['==', ['get', 'type'], 'city'],
           paint: {
-            'circle-radius': 5, // 核心小一点
-            'circle-color': '#ffffff', // 纯白内芯
-            'circle-stroke-width': 1.5, // 加上一圈细细的描边更精致
+            'circle-radius': 5,
+            'circle-color': '#ffffff',
+            'circle-stroke-width': 1.5,
             'circle-stroke-color': '#0F766E'
           }
         });
       }
 
-      // 隐形的巨大触控层，用于扩大手机端点击判定范围
+      // 🚀 核心修改 1：动态判定当前是手机还是电脑，分配不同的隐形触控半径
+      const isMobile = window.innerWidth < 768;
+      
       if (!m.getLayer('city-dots-hitbox')) {
         m.addLayer({
           id: 'city-dots-hitbox',
@@ -149,7 +151,8 @@ export default function TravelGlobe({ mapboxToken, locale }: { mapboxToken: stri
           source: 'my-footprints',
           filter: ['==', ['get', 'type'], 'city'],
           paint: {
-            'circle-radius': 20,    
+            // 手机端给 25 像素的超大点击区，电脑端给 8 像素的精准悬停区
+            'circle-radius': isMobile ? 20 : 10, 
             'circle-color': '#000000', 
             'circle-opacity': 0 
           }
@@ -161,9 +164,17 @@ export default function TravelGlobe({ mapboxToken, locale }: { mapboxToken: stri
 
     map.current.on('style.load', setupCustomLayers);
 
-    const popup = new mapboxgl.Popup({ closeButton: false, closeOnClick: false, offset: 12 });
+    // 🚀 核心修改 2：监听浏览器窗口变化，如果用户拉伸窗口，实时调整触控区大小
+    const handleResize = () => {
+      if (map.current && map.current.getLayer('city-dots-hitbox')) {
+        const radius = window.innerWidth < 768 ? 25 : 8;
+        map.current.setPaintProperty('city-dots-hitbox', 'circle-radius', radius);
+      }
+    };
+    window.addEventListener('resize', handleResize);
 
-    let popupTimeout: NodeJS.Timeout | null = null;
+    const popup = new mapboxgl.Popup({ closeButton: false, closeOnClick: false, offset: 12 });
+    let popupTimeout: NodeJS.Timeout | null = null; // 用于延迟关闭弹窗
 
     const showCityPopup = (e: any) => {
       if (!map.current || !e.features || e.features.length === 0) return;
@@ -176,6 +187,7 @@ export default function TravelGlobe({ mapboxToken, locale }: { mapboxToken: stri
         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
       }
 
+      // 如果准备关弹窗，赶紧取消（防抖操作）
       if (popupTimeout) {
         clearTimeout(popupTimeout);
         popupTimeout = null;
@@ -186,30 +198,32 @@ export default function TravelGlobe({ mapboxToken, locale }: { mapboxToken: stri
            .addTo(map.current);
     };
 
+    
+    // 💻 电脑端：悬停触发
     map.current.on('mouseenter', 'city-dots-hitbox', (e) => {
       if (!map.current) return;
       map.current.getCanvas().style.cursor = 'pointer';
-      
-      if (window.innerWidth >= 768) {
-        showCityPopup(e);
-      }
+      if (window.innerWidth >= 768) showCityPopup(e);
     });
 
+    // 💻 电脑端：移出时延迟关闭
     map.current.on('mouseleave', 'city-dots-hitbox', () => {
       if (!map.current) return;
       map.current.getCanvas().style.cursor = '';
-      
       if (window.innerWidth >= 768) {
+        // 延迟 150 毫秒再消失，防止鼠标不小心滑出范围引起弹窗闪烁
         popupTimeout = setTimeout(() => {
           popup.remove();
-        }, 150); 
+        }, 150);
       }
     });
 
+    // 📱 手机端：点击显示
     map.current.on('click', 'city-dots-hitbox', (e) => {
       if (window.innerWidth < 768) showCityPopup(e);
     });
 
+    // 📱 手机端：点击地图空白处关闭弹窗
     map.current.on('click', (e) => {
       if (window.innerWidth < 768 && map.current) {
         const features = map.current.queryRenderedFeatures(e.point, { layers: ['city-dots-hitbox'] });
@@ -220,9 +234,12 @@ export default function TravelGlobe({ mapboxToken, locale }: { mapboxToken: stri
     });
 
     const bounds: [[number, number], [number, number]] = [[-3.7, 31.2], [139.7, 48.9]];
-    map.current.fitBounds(bounds, { padding: 50, duration: 2000 });
+
+    const mapPadding = window.innerWidth < 768 ? 10 : 50;
+    map.current.fitBounds(bounds, { padding: mapPadding, duration: 2000 });
 
     return () => {
+      window.removeEventListener('resize', handleResize); // 清理监听器
       map.current?.remove();
       map.current = null;
     };
