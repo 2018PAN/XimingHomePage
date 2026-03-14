@@ -171,7 +171,7 @@ export default function TravelGlobe({ mapboxToken, locale }: { mapboxToken: stri
       popup.remove();
     });
 
-    const bounds = [[-3.7, 31.2], [139.7, 48.9]] as const;
+    const bounds: [[number, number], [number, number]] = [[-3.7, 31.2], [139.7, 48.9]];
     map.current.fitBounds(bounds, { padding: 50, duration: 2000 });
 
     return () => {
