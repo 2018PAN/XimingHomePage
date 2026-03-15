@@ -1,16 +1,28 @@
 "use client";
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 export default function GridBackground({ theme = 'dark' }: { theme?: string }) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const animRef = useRef<any>(null); 
+    
+    const [isMobile, setIsMobile] = useState(false);
+    const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
-        if (typeof window === 'undefined' || !canvasRef.current) return;
-
-        const isPhone = /Mobile|Android|iOS|iPhone|iPad|iPod|Windows Phone|KFAPWI/i.test(navigator.userAgent);
+        setMounted(true);
+        const checkMobile = () => window.innerWidth < 768 || /Mobile|Android|iOS|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        setIsMobile(checkMobile());
         
+        const handleResize = () => setIsMobile(checkMobile());
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    useEffect(() => {
+        // 如果还没挂载、或者是手机端，直接中止，不执行任何 Canvas 画图逻辑
+        if (!mounted || isMobile || typeof window === 'undefined' || !canvasRef.current) return;
+
         class GridAnimation {
             canvas: HTMLCanvasElement;
             ctx: CanvasRenderingContext2D;
@@ -28,17 +40,13 @@ export default function GridBackground({ theme = 'dark' }: { theme?: string }) {
 
             constructor(canvas: HTMLCanvasElement, currentTheme: string) {
                 this.canvas = canvas;
-                // 🚀 手机端关闭 alpha 缓冲区，强制硬件加速渲染
-                this.ctx = canvas.getContext("2d", { alpha: !isPhone })!; 
+                this.ctx = canvas.getContext("2d", { alpha: true })!; 
                 this.isDark = currentTheme === 'dark'; 
 
                 this.options = {
-                    speed: isPhone ? 0.04 : 0.05,
-                    borderColor: this.isDark 
-                        ? (isPhone ? "rgba(255, 255, 255, 0.22)" : "rgba(255, 255, 255, 0.12)") 
-                        : "rgba(0, 0, 0, 0.08)",
-                    // 手机端格子保持 70，电脑端保持 70（按你代码现在的逻辑）
-                    squareSize: isPhone ? 80 : 70,
+                    speed: 0.05,
+                    borderColor: this.isDark ? "rgba(255, 255, 255, 0.12)" : "rgba(0, 0, 0, 0.08)",
+                    squareSize: 70,
                     specialBlockColor: "rgba(52, 211, 153, 0.8)", 
                     snakeHeadColor: this.isDark ? "rgba(255, 255, 255, 0.95)" : "rgba(0, 0, 0, 0.85)",
                     snakeColorDecay: 0.88,
@@ -68,7 +76,8 @@ export default function GridBackground({ theme = 'dark' }: { theme?: string }) {
                 if (this.hoveredSquare?.x !== hoveredSquareX || this.hoveredSquare?.y !== hoveredSquareY) {
                     if (this.hoveredSquare) {
                         this.snakeBody.unshift({ x: this.hoveredSquare.x, y: this.hoveredSquare.y });
-                        if (!this.shouldGrow && this.snakeBody.length > (isPhone ? 1 : 1)) this.snakeBody.pop();
+                        // 默认保留 1 节身体
+                        if (!this.shouldGrow && this.snakeBody.length > 1) this.snakeBody.pop();
                         this.shouldGrow = false;
                     }
                     this.hoveredSquare = { x: hoveredSquareX, y: hoveredSquareY };
@@ -126,7 +135,6 @@ export default function GridBackground({ theme = 'dark' }: { theme?: string }) {
 
                 this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
                 
-                // 1. 背景绘制
                 this.ctx.fillStyle = this.isDark ? '#080808' : '#fafafa';
                 this.ctx.fillRect(0, 0, w, h);
 
@@ -135,35 +143,17 @@ export default function GridBackground({ theme = 'dark' }: { theme?: string }) {
                 const startX = Math.floor(this.gridOffset.x / s) * s;
                 const startY = Math.floor(this.gridOffset.y / s) * s;
 
-                // 2. 核心适配：手机端采用批处理线条绘制，极大提升性能
                 this.ctx.beginPath();
                 this.ctx.strokeStyle = this.options.borderColor;
-                // 🚀 手机端线条强制 1 物理像素宽度，防止模糊
-                this.ctx.lineWidth = isPhone ? (1 / dpr) : 0.5;
+                this.ctx.lineWidth = 0.5;
 
-                if (isPhone) {
-                    // 🚀 手机端优化算法：画长线而不是画小方块
-                    for (let x = -offX; x <= w; x += s) {
-                        const snapX = Math.round(x);
-                        this.ctx.moveTo(snapX, 0);
-                        this.ctx.lineTo(snapX, h);
-                    }
+                for (let x = -offX; x <= w; x += s) {
                     for (let y = -offY; y <= h; y += s) {
-                        const snapY = Math.round(y);
-                        this.ctx.moveTo(0, snapY);
-                        this.ctx.lineTo(w, snapY);
-                    }
-                } else {
-                    // 电脑端保持原逻辑，支持 strokeRect 等，确保贪吃蛇视觉一致
-                    for (let x = -offX; x <= w; x += s) {
-                        for (let y = -offY; y <= h; y += s) {
-                            this.ctx.strokeRect(x, y, s, s);
-                        }
+                        this.ctx.strokeRect(x, y, s, s);
                     }
                 }
                 this.ctx.stroke();
 
-                // 3. 绘制食物 (取整防止闪烁)
                 if (this.specialBlock) {
                     const bx = Math.round(this.specialBlock.x * s + startX - this.gridOffset.x);
                     const by = Math.round(this.specialBlock.y * s + startY - this.gridOffset.y);
@@ -171,7 +161,6 @@ export default function GridBackground({ theme = 'dark' }: { theme?: string }) {
                     this.ctx.fillRect(bx, by, s, s);
                 }
 
-                // 4. 绘制蛇身
                 const colorValue = this.isDark ? 255 : 0;
                 this.snakeBody.forEach((seg, i) => {
                     const sx = Math.round(seg.x * s + startX - this.gridOffset.x);
@@ -180,7 +169,6 @@ export default function GridBackground({ theme = 'dark' }: { theme?: string }) {
                     this.ctx.fillRect(sx, sy, s, s);
                 });
 
-                // 5. 渐变层
                 const grad = this.ctx.createRadialGradient(w/2, h/2, 0, w/2, h/2, Math.max(w,h)/1.5);
                 if (this.isDark) {
                     grad.addColorStop(0, "rgba(8, 8, 8, 0)");
@@ -224,18 +212,15 @@ export default function GridBackground({ theme = 'dark' }: { theme?: string }) {
         anim.init();
         animRef.current = anim;
         return () => anim.destroy();
-    }, []); 
+    }, [mounted, isMobile, theme]); // 依赖项加上 isMobile
 
-    useEffect(() => {
-        if (animRef.current) {
-            const anim = animRef.current;
-            anim.isDark = theme === 'dark';
-            const isPhone = /Mobile|Android|iOS|iPhone|iPad|iPod/i.test(navigator.userAgent);
-            anim.options.borderColor = anim.isDark 
-                ? (isPhone ? "rgba(255, 255, 255, 0.24)" : "rgba(255, 255, 255, 0.18)") 
-                : "rgba(0, 0, 0, 0.12)";
-        }
-    }, [theme]);
+    if (!mounted) return null;
 
+    // 手机端，返回 null，不再渲染 canvas，底层的全局背景就会透出来。
+    if (isMobile) {
+        return null;
+    }
+
+    // 电脑端：照常渲染 canvas 贪吃蛇
     return <canvas ref={canvasRef} style={{ position: 'absolute', top: 0, left: 0, zIndex: 0 }} />;
 }

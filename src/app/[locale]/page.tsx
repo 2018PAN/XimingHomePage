@@ -9,9 +9,6 @@ export default function Home({ params: { locale } }: { params: { locale: string 
     const [theme, setTheme] = useState('dark');
 
     useEffect(() => {
-
-		
-        // 智能检测主题
         const checkTheme = () => {
             const htmlTheme = document.documentElement.getAttribute('data-theme');
             const bodyTheme = document.body.getAttribute('data-theme');
@@ -35,22 +32,30 @@ export default function Home({ params: { locale } }: { params: { locale: string 
     const isZh = locale.includes('zh');
 
     return (
-        <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', overflow: 'hidden', backgroundColor: theme === 'dark' ? '#080808' : '#fafafa', zIndex: 9999 }}>
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', overflow: 'hidden', zIndex: 9999 }}>
             <style>{`
                 footer {
                     display: none !important;
                 }
+                /* 在手机端隐藏专属鼠标光标，防止卡在屏幕中间 */
+                @media (max-width: 768px) {
+                    .hide-on-mobile {
+                        display: none !important;
+                    }
+                }
             `}</style>
-            {/* 全局高级光标 */}
-            <TargetCursor />
 
-            {/* 底层：贪吃蛇网格动画 */}
+            {/* 给光标套上一个手机端隐藏的壳子 */}
+            <div className="hide-on-mobile">
+                <TargetCursor />
+            </div>
+
+            {/* 底层：贪吃蛇网格动画 (内部已设置为手机端透明) */}
             <GridBackground theme={theme} />
             
-            {/* 上层：主页内容 (必须用 pointerEvents: 'none' 保证鼠标事件能穿透给 Canvas) */}
+            {/* 上层：主页内容 */}
             <Flex direction="column" alignItems="center" justifyContent="center" fillWidth fillHeight style={{ position: 'relative', zIndex: 10, pointerEvents: 'none' }}>
                 
-                {/* 个人信息区 (恢复 pointerEvents: 'auto' 使其可交互) */}
                 <div style={{ pointerEvents: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <Avatar src="/images/avatar.jpg" size="xl" style={{ marginBottom: '24px' }} />
                     <Text variant="display-strong-m" onBackground="neutral-strong" style={{ letterSpacing: '0.05em' }}>
@@ -66,7 +71,7 @@ export default function Home({ params: { locale } }: { params: { locale: string 
                         {isZh ? '关于我' : 'About'}
                     </Button>
                     <Button variant="tertiary" prefixIcon="grid" href={`/${locale}/work`}>
-                        {isZh ? '项目展示' : 'Projects'}
+                        {isZh ? '项目' : 'Projects'}
                     </Button>
                     <Button variant="tertiary" prefixIcon="globe" href={`/${locale}/gallery`}>
                         {isZh ? '足迹' : 'Footprints'}

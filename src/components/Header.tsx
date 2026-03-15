@@ -158,16 +158,26 @@ export const Header = () => {
                                 background="surface" border="neutral-medium" borderStyle="solid-1" radius="m-4" shadow="l"
                                 padding="4" gap="2"
                                 justifyContent="center">
-                                {i18n && routing.locales.map((locale, index) => (
-                                    <ToggleButton
-                                        key={index}
-                                        selected={params?.locale === locale}
-                                        onClick={() => handleLanguageChange(locale)}
-                                        className={isPending && 'pointer-events-none opacity-60' || ''}
-                                        >
-                                        {locale.toUpperCase()}
-                                    </ToggleButton>
-                                ))}
+                                {i18n && routing.locales.map((locale, index) => {
+                                    const isCurrentZh = params?.locale === 'zh';
+                                    let displayLabel = locale.toUpperCase();
+                                    
+                                    if (isCurrentZh) {
+                                        // 中文模式
+                                        displayLabel = locale === 'zh' ? '中' : '英';
+                                    }
+
+                                    return (
+                                        <ToggleButton
+                                            key={index}
+                                            selected={params?.locale === locale}
+                                            onClick={() => handleLanguageChange(locale)}
+                                            className={isPending ? 'pointer-events-none opacity-60' : ''}
+                                            >
+                                            {displayLabel}
+                                        </ToggleButton>
+                                    );
+                                })}
                             </Flex>
                         }
                         <Flex hide="s">
