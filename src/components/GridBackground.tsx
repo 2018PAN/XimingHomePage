@@ -34,15 +34,14 @@ export default function GridBackground({ theme = 'dark' }: { theme?: string }) {
 
                 this.options = {
                     speed: isPhone ? 0.04 : 0.05,
-                    // 🚀 手机端线条稍微加亮 
                     borderColor: this.isDark 
                         ? (isPhone ? "rgba(255, 255, 255, 0.22)" : "rgba(255, 255, 255, 0.12)") 
                         : "rgba(0, 0, 0, 0.08)",
-                    // 🚀 手机端格子保持 70，电脑端保持 70（按你代码现在的逻辑）
-                    squareSize: isPhone ? 70 : 70,
+                    // 手机端格子保持 70，电脑端保持 70（按你代码现在的逻辑）
+                    squareSize: isPhone ? 80 : 70,
                     specialBlockColor: "rgba(52, 211, 153, 0.8)", 
                     snakeHeadColor: this.isDark ? "rgba(255, 255, 255, 0.95)" : "rgba(0, 0, 0, 0.85)",
-                    snakeColorDecay: 0.85,
+                    snakeColorDecay: 0.88,
                     transitionDuration: 150,
                 };
                 
@@ -69,7 +68,7 @@ export default function GridBackground({ theme = 'dark' }: { theme?: string }) {
                 if (this.hoveredSquare?.x !== hoveredSquareX || this.hoveredSquare?.y !== hoveredSquareY) {
                     if (this.hoveredSquare) {
                         this.snakeBody.unshift({ x: this.hoveredSquare.x, y: this.hoveredSquare.y });
-                        if (!this.shouldGrow && this.snakeBody.length > (isPhone ? 8 : 12)) this.snakeBody.pop();
+                        if (!this.shouldGrow && this.snakeBody.length > (isPhone ? 0 : 1)) this.snakeBody.pop();
                         this.shouldGrow = false;
                     }
                     this.hoveredSquare = { x: hoveredSquareX, y: hoveredSquareY };

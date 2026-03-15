@@ -89,7 +89,6 @@ export function Projects({ projects, range, locale }: ProjectsProps) {
                         <TagList />
                     </Flex>
 
-                    {/* 🚀 手机端布局：show="s" (仅手机显示)，使用折叠菜单样式 */}
                     <Flex show="s" direction="column">
                         <Flex 
                             className="cursor-target"
