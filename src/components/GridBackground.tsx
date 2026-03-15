@@ -68,7 +68,7 @@ export default function GridBackground({ theme = 'dark' }: { theme?: string }) {
                 if (this.hoveredSquare?.x !== hoveredSquareX || this.hoveredSquare?.y !== hoveredSquareY) {
                     if (this.hoveredSquare) {
                         this.snakeBody.unshift({ x: this.hoveredSquare.x, y: this.hoveredSquare.y });
-                        if (!this.shouldGrow && this.snakeBody.length > (isPhone ? 0 : 1)) this.snakeBody.pop();
+                        if (!this.shouldGrow && this.snakeBody.length > (isPhone ? 1 : 1)) this.snakeBody.pop();
                         this.shouldGrow = false;
                     }
                     this.hoveredSquare = { x: hoveredSquareX, y: hoveredSquareY };
