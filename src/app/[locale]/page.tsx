@@ -7,8 +7,15 @@ import TargetCursor from '@/components/TargetCursor';
 
 export default function Home({ params: { locale } }: { params: { locale: string } }) {
     const [theme, setTheme] = useState('dark');
+    
+    // 🚀 新增：彻底掌控触屏设备的生杀大权
+    const [isTouchDevice, setIsTouchDevice] = useState(false);
+    const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
+        setMounted(true);
+
+        // 智能检测主题
         const checkTheme = () => {
             const htmlTheme = document.documentElement.getAttribute('data-theme');
             const bodyTheme = document.body.getAttribute('data-theme');
@@ -26,7 +33,23 @@ export default function Home({ params: { locale } }: { params: { locale: string 
         observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'class'] });
         observer.observe(document.body, { attributes: true, attributeFilter: ['data-theme', 'class'] });
 
-        return () => observer.disconnect();
+        // 🚀 终极物理触控探测：抓捕所有带触摸屏的设备（包含强行伪装成Mac的iPad）
+        const checkTouch = () => {
+            return (
+                window.innerWidth <= 1024 || // 屏幕小于平板尺寸
+                navigator.maxTouchPoints > 0 || // 物理屏幕支持触控点（绝杀 iPad 和安卓板）
+                window.matchMedia('(hover: none) and (pointer: coarse)').matches
+            );
+        };
+        setIsTouchDevice(checkTouch());
+
+        const handleResize = () => setIsTouchDevice(checkTouch());
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            observer.disconnect();
+            window.removeEventListener('resize', handleResize);
+        };
     }, []);
 
     const isZh = locale.includes('zh');
@@ -37,20 +60,14 @@ export default function Home({ params: { locale } }: { params: { locale: string 
                 footer {
                     display: none !important;
                 }
-                /* 在手机端隐藏专属鼠标光标，防止卡在屏幕中间 */
-                @media (max-width: 768px) {
-                    .hide-on-mobile {
-                        display: none !important;
-                    }
-                }
             `}</style>
 
-            {/* 给光标套上一个手机端隐藏的壳子 */}
-            <div className="hide-on-mobile">
+            {/* 只有挂载完毕且【不是】触控设备时，才渲染这个光标组件！ */}
+            {mounted && !isTouchDevice && (
                 <TargetCursor />
-            </div>
+            )}
 
-            {/* 底层：贪吃蛇网格动画 (内部已设置为手机端透明) */}
+            {/* 底层：贪吃蛇网格动画 */}
             <GridBackground theme={theme} />
             
             {/* 上层：主页内容 */}
@@ -71,7 +88,7 @@ export default function Home({ params: { locale } }: { params: { locale: string 
                         {isZh ? '关于我' : 'About'}
                     </Button>
                     <Button variant="tertiary" prefixIcon="grid" href={`/${locale}/work`}>
-                        {isZh ? '项目' : 'Projects'}
+                        {isZh ? '项目展示' : 'Projects'}
                     </Button>
                     <Button variant="tertiary" prefixIcon="globe" href={`/${locale}/gallery`}>
                         {isZh ? '足迹' : 'Footprints'}

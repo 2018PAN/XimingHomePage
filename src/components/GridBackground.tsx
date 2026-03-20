@@ -11,7 +11,19 @@ export default function GridBackground({ theme = 'dark' }: { theme?: string }) {
 
     useEffect(() => {
         setMounted(true);
-        const checkMobile = () => window.innerWidth < 768 || /Mobile|Android|iOS|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        
+        // 🚀 终极全平台触控设备检测引擎
+        const checkMobile = () => {
+            if (typeof window === 'undefined') return false;
+            const isTouchPrimary = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+            const isSmallScreen = window.innerWidth <= 1024;
+            const isMobileAgent = /Mobile|Android|iOS|iPhone|iPad|iPod|Tablet/i.test(navigator.userAgent);
+            const isModernIPad = navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1; 
+            
+            // 只要满足以上任何一条，就判定为手机/平板
+            return isTouchPrimary || isSmallScreen || isMobileAgent || isModernIPad;
+        };
+
         setIsMobile(checkMobile());
         
         const handleResize = () => setIsMobile(checkMobile());
@@ -20,7 +32,6 @@ export default function GridBackground({ theme = 'dark' }: { theme?: string }) {
     }, []);
 
     useEffect(() => {
-        // 如果还没挂载、或者是手机端，直接中止，不执行任何 Canvas 画图逻辑
         if (!mounted || isMobile || typeof window === 'undefined' || !canvasRef.current) return;
 
         class GridAnimation {
