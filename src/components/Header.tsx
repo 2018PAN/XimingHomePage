@@ -13,7 +13,7 @@ import { Locale, usePathname, useRouter } from '@/i18n/routing';
 import { renderContent } from "@/app/resources";
 import { useTranslations } from "next-intl";
 import { i18n } from "@/app/resources/config";
-import ThemeToggle from '@/components/ThemeToggle'; 
+import ThemeToggle from '@/components/ThemeToggle';
 
 type TimeDisplayProps = {
     timeZone: string;
@@ -63,7 +63,7 @@ export const Header = () => {
         startTransition(() => {
             router.replace(
                 pathname,
-                {locale: nextLocale}
+                { locale: nextLocale }
             )
         })
     }
@@ -78,7 +78,7 @@ export const Header = () => {
                 position="fixed" zIndex={9}
                 fillWidth minHeight="80" justifyContent="center">
             </Flex>
-            <Flex style={{height: 'fit-content'}}
+            <Flex style={{ height: 'fit-content' }}
                 className={styles.position}
                 as="header"
                 zIndex={9}
@@ -88,7 +88,7 @@ export const Header = () => {
                     paddingLeft="12" fillWidth
                     alignItems="center"
                     textVariant="body-default-s">
-                    { display.location && (
+                    {display.location && (
                         <Flex hide="s">
                             {t(person.location)}
                         </Flex>
@@ -102,7 +102,7 @@ export const Header = () => {
                         <Flex
                             gap="2"
                             textVariant="body-default-s">
-                            { routes['/'] && (
+                            {routes['/'] && (
                                 <ToggleButton
                                     prefixIcon="home"
                                     href={`/${params?.locale}`}
@@ -110,7 +110,7 @@ export const Header = () => {
                                     <Flex paddingX="2" hide="s">{home.label}</Flex>
                                 </ToggleButton>
                             )}
-                            { routes['/about'] && (
+                            {routes['/about'] && (
                                 <ToggleButton
                                     prefixIcon="person"
                                     href={`/${params?.locale}/about`}
@@ -118,7 +118,7 @@ export const Header = () => {
                                     <Flex paddingX="2" hide="s">{about.label}</Flex>
                                 </ToggleButton>
                             )}
-                            { routes['/work'] && (
+                            {routes['/work'] && (
                                 <ToggleButton
                                     prefixIcon="grid"
                                     href={`/${params?.locale}/work`}
@@ -126,7 +126,7 @@ export const Header = () => {
                                     <Flex paddingX="2" hide="s">{work.label}</Flex>
                                 </ToggleButton>
                             )}
-                            { routes['/blog'] && (
+                            {routes['/blog'] && (
                                 <ToggleButton
                                     prefixIcon="book"
                                     href={`/${params?.locale}/blog`}
@@ -134,7 +134,7 @@ export const Header = () => {
                                     <Flex paddingX="2" hide="s">{blog.label}</Flex>
                                 </ToggleButton>
                             )}
-                            { routes['/gallery'] && (
+                            {routes['/gallery'] && (
                                 <ToggleButton
                                     prefixIcon="globe"
                                     href={`/${params?.locale}/gallery`}
@@ -161,11 +161,9 @@ export const Header = () => {
                                 {i18n && routing.locales.map((locale, index) => {
                                     const isCurrentZh = params?.locale === 'zh';
                                     let displayLabel = locale.toUpperCase();
-                                    
-                                    if (isCurrentZh) {
-                                        // 中文模式
-                                        displayLabel = locale === 'zh' ? '中' : '英';
-                                    }
+
+                                    if (locale === 'zh') displayLabel = '中';
+                                    if (locale === 'en') displayLabel = 'EN';
 
                                     return (
                                         <ToggleButton
@@ -173,7 +171,7 @@ export const Header = () => {
                                             selected={params?.locale === locale}
                                             onClick={() => handleLanguageChange(locale)}
                                             className={isPending ? 'pointer-events-none opacity-60' : ''}
-                                            >
+                                        >
                                             {displayLabel}
                                         </ToggleButton>
                                     );
@@ -181,8 +179,8 @@ export const Header = () => {
                             </Flex>
                         }
                         <Flex hide="s">
-                            { display.time && (
-                                <TimeDisplay timeZone={person.location}/>
+                            {display.time && (
+                                <TimeDisplay timeZone={person.location} />
                             )}
                         </Flex>
                     </Flex>
