@@ -10,7 +10,8 @@ export const VISITED_COUNTRIES = [
   'SWE', // 瑞典
   'DNK', // 丹麦
   'CZE', // 捷克
-  'VAT'  // 梵蒂冈
+  'VAT',  // 梵蒂冈
+  'CHE', // 瑞士
 ];
 
 // 城市坐标库
@@ -58,6 +59,7 @@ const COORDS = {
   Strasbourg: [7.7521, 48.5734],
   VaticanCity: [12.4534, 41.9029],
   Aachen: [6.0844,50.7756],
+  Zurich: [8.5483,47.3770],
 };
 
 // 城市与航线数据
