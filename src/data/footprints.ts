@@ -126,6 +126,6 @@ export const myCityFootprints = {
     { type: "Feature", geometry: { type: "Point", coordinates: COORDS.Strasbourg }, properties: { type: "city", name_en: "Strasbourg", name_zh: "斯特拉斯堡" } },
     { type: "Feature", geometry: { type: "Point", coordinates: COORDS.VaticanCity }, properties: { type: "city", name_en: "Vatican City", name_zh: "梵蒂冈城" } },
     { type: "Feature", geometry: { type: "Point", coordinates: COORDS.Aachen }, properties: { type: "city", name_en: "Aachen", name_zh: "亚琛" } },
-    { type: "Feature", geometry: { type: "Point", coordinates: COORDS.Aachen }, properties: { type: "city", name_en: "Zurich", name_zh: "苏黎世" } },
+    { type: "Feature", geometry: { type: "Point", coordinates: COORDS.Zurich }, properties: { type: "city", name_en: "Zurich", name_zh: "苏黎世" } },
   ]
 };
