@@ -310,7 +310,7 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
           width: 0,
           height: 0,
           pointerEvents: 'none',
-          zIndex: 999999, // 再加一个9，确保无法无天
+          zIndex: 99999999,
           willChange: 'transform'
         }}
       >
