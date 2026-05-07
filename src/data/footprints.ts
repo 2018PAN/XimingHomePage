@@ -77,6 +77,8 @@ export const myCityFootprints = {
     { type: "Feature", geometry: { type: "LineString", coordinates: [COORDS.Yantai, COORDS.Wuhan] }, properties: { type: "route" } }, 
     { type: "Feature", geometry: { type: "LineString", coordinates: [COORDS.Wuhan, COORDS.Guangzhou] }, properties: { type: "route" } }, 
     { type: "Feature", geometry: { type: "LineString", coordinates: [COORDS.Guangzhou, COORDS.Yantai] }, properties: { type: "route" } }, 
+    { type: "Feature", geometry: { type: "LineString", coordinates: [COORDS.Yantai, COORDS.Shanghai] }, properties: { type: "route" } }, 
+
 
     // 中国城市
     { type: "Feature", geometry: { type: "Point", coordinates: COORDS.Yantai }, properties: { type: "city", name_en: "Yantai", name_zh: "烟台" } },

@@ -1,7 +1,7 @@
 'use client'; 
 
 import React, { useEffect, useRef, useCallback, useMemo, useState } from 'react';
-import { createPortal } from 'react-dom'; // 🚀 1. 引入越狱神器 Portal
+import { createPortal } from 'react-dom'; 
 import { gsap } from 'gsap';
 
 export interface TargetCursorProps {
@@ -29,7 +29,6 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
   const tickerFnRef = useRef<(() => void) | null>(null);
   const activeStrengthRef = useRef({ current: 0 });
 
-  // 🚀 2. 增加挂载状态，确保在客户端渲染时才调用 Portal
   const [mounted, setMounted] = useState(false);
 
   const isMobile = useMemo(() => {
@@ -50,7 +49,7 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
   }, []);
 
   useEffect(() => {
-    setMounted(true); // 组件加载完毕后允许渲染
+    setMounted(true); 
   }, []);
 
   useEffect(() => {
@@ -94,6 +93,12 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
     createSpinTimeline();
 
     const tickerFn = () => {
+      // 如果目标元素被点击后从网页上移除了，强制释放光标
+      if (activeTarget && !activeTarget.isConnected) {
+        if (currentLeaveHandler) currentLeaveHandler();
+        return;
+      }
+
       if (!targetCornerPositionsRef.current || !cursorRef.current || !cornersRef.current) {
         return;
       }
@@ -124,6 +129,7 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
 
     const moveHandler = (e: MouseEvent) => moveCursor(e.clientX, e.clientY);
     window.addEventListener('mousemove', moveHandler);
+
 
     const scrollHandler = () => {
       if (!activeTarget || !cursorRef.current) return;
@@ -261,6 +267,7 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
         gsap.ticker.remove(tickerFnRef.current);
       }
       window.removeEventListener('mousemove', moveHandler);
+      window.removeEventListener('keydown', keyDownHandler); // 🚀 别忘了清理键盘监听
       window.removeEventListener('mouseover', enterHandler as EventListener);
       window.removeEventListener('scroll', scrollHandler);
       window.removeEventListener('mousedown', mouseDownHandler);
@@ -290,13 +297,19 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
     return null;
   }
 
-  // 🚀 3. 使用 createPortal，把光标传送到 <body> 的最后，无视任何遮挡！
   return createPortal(
     <>
       {hideDefaultCursor && (
         <style>{`
           *, a, button, [role="button"] {
             cursor: none !important;
+          }
+          
+          dialog, dialog *, [role="dialog"], [role="dialog"] *, [class*="Lightbox"] *, [class*="Modal"] *, .smart-image-lightbox * {
+            cursor: auto !important;
+          }
+          dialog button, dialog a, [role="dialog"] button, [class*="Lightbox"] button {
+            cursor: pointer !important;
           }
         `}</style>
       )}
@@ -310,7 +323,7 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
           width: 0,
           height: 0,
           pointerEvents: 'none',
-          zIndex: 99999999,
+          zIndex: 2147483647,
           willChange: 'transform'
         }}
       >
@@ -329,14 +342,13 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
             boxShadow: '0 0 6px rgba(52, 211, 153, 0.6)'
           }}
         />
-        {/* 四个角的 Div */}
         <div className="target-cursor-corner" style={{ position: 'absolute', top: '50%', left: '50%', width: '12px', height: '12px', border: '2px solid #34d399', borderRight: 'none', borderBottom: 'none', transform: 'translate(-150%, -150%)', willChange: 'transform' }} />
         <div className="target-cursor-corner" style={{ position: 'absolute', top: '50%', left: '50%', width: '12px', height: '12px', border: '2px solid #34d399', borderLeft: 'none', borderBottom: 'none', transform: 'translate(50%, -150%)', willChange: 'transform' }} />
         <div className="target-cursor-corner" style={{ position: 'absolute', top: '50%', left: '50%', width: '12px', height: '12px', border: '2px solid #34d399', borderLeft: 'none', borderTop: 'none', transform: 'translate(50%, 50%)', willChange: 'transform' }} />
         <div className="target-cursor-corner" style={{ position: 'absolute', top: '50%', left: '50%', width: '12px', height: '12px', border: '2px solid #34d399', borderRight: 'none', borderTop: 'none', transform: 'translate(-150%, 50%)', willChange: 'transform' }} />
       </div>
     </>,
-    document.body // 👈 传送到最顶层
+    document.body 
   );
 };
 
