@@ -267,7 +267,6 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
         gsap.ticker.remove(tickerFnRef.current);
       }
       window.removeEventListener('mousemove', moveHandler);
-      window.removeEventListener('keydown', keyDownHandler); // 🚀 别忘了清理键盘监听
       window.removeEventListener('mouseover', enterHandler as EventListener);
       window.removeEventListener('scroll', scrollHandler);
       window.removeEventListener('mousedown', mouseDownHandler);
